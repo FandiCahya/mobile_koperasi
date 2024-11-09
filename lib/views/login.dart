@@ -60,6 +60,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 150,
                 ),
                 AppSpacing.heightExtraLarge,
+                Text(
+                  'Aplikasi Pengajuan Kredit KSP Berbasis Mobile',
+                  style: AppTextStyles.heading.copyWith(
+                    fontSize: 18, // Adjust the font size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign:
+                      TextAlign.center, // This should be in the Text widget
+                ),
+
+                AppSpacing.heightVeryLarge,
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Sign In', style: AppTextStyles.heading),
@@ -137,7 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Container(
               width: 30,
               height: 30,
-              child: Image.asset('assets/img/polinema.png', fit: BoxFit.contain),
+              child:
+                  Image.asset('assets/img/polinema.png', fit: BoxFit.contain),
             ),
           ),
           Positioned(
@@ -146,7 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Container(
               width: 30,
               height: 30,
-              child: Image.asset('assets/img/kemdikbud.png', fit: BoxFit.contain),
+              child:
+                  Image.asset('assets/img/kemdikbud.png', fit: BoxFit.contain),
             ),
           ),
         ],

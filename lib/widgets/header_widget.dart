@@ -1,8 +1,6 @@
-// lib/widgets/header_widget.dart
-
 import 'package:flutter/material.dart';
 import '../core/colors.dart';
-import '../views/ProfilePage.dart'; // Pastikan impor halaman ProfilePage
+import '../views/ProfilePage.dart'; // Ensure importing the ProfilePage
 
 class HeaderWidget extends StatelessWidget {
   final String greeting;
@@ -17,6 +15,9 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen width and height for responsiveness
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -26,13 +27,14 @@ class HeaderWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Column containing greeting and name
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 greeting,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: screenWidth > 600 ? 16 : 14, // Adjust text size for smaller screens
                   color: Colors.white70,
                   fontWeight: FontWeight.w400,
                 ),
@@ -41,13 +43,14 @@ class HeaderWidget extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: screenWidth > 600 ? 24 : 20, // Adjust font size for smaller screens
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
+          // Use a responsive CircleAvatar
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -61,10 +64,10 @@ class HeaderWidget extends StatelessWidget {
               );
             },
             child: CircleAvatar(
-              radius: 24,
+              radius: screenWidth > 600 ? 24 : 20, // Adjust CircleAvatar size based on screen width
               backgroundColor: AppColors.card2,
               child: CircleAvatar(
-                radius: 22,
+                radius: screenWidth > 600 ? 22 : 18, // Inner CircleAvatar size adjustment
                 backgroundImage: AssetImage(profileImagePath),
               ),
             ),

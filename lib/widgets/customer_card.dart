@@ -20,11 +20,16 @@ class CustomerCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black
-                  .withOpacity(0.1), // Warna shadow (transparan hitam)
-              spreadRadius: 2, // Jarak penyebaran shadow
-              blurRadius: 8, // Efek blur shadow
-              offset: Offset(0, 4), // Posisi shadow (horizontal, vertical)
+              color: Colors.black.withOpacity(0.1), // Warna shadow (transparan hitam)
+              spreadRadius: 0.5, // Jarak penyebaran shadow
+              blurRadius: 5, // Efek blur shadow
+              offset: Offset(4, 4), // Shadow di kanan bawah
+            ),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05), // Shadow tambahan bawah
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: Offset(0, 6), // Fokus pada bawah
             ),
           ],
         ),

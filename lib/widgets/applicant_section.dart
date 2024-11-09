@@ -15,36 +15,49 @@ class ApplicantSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen width for responsiveness
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Title Text
             Text(
               "Nasabah yang Mengajukan",
               style: AppTextStyles.pengajuanNasabah,
             ),
-            TextButton(
-              onPressed: () {
-                Future.delayed(Duration(milliseconds: 100), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AllApplicantsPage(applicants: applicants),
+            // Flexible "See All" Button to prevent overflow
+            Flexible(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AllApplicantsPage(applicants: applicants),
+                        ),
+                      );
+                    });
+                  },
+                  child: Text(
+                    "See All",
+                    style: AppTextStyles.seeAll.copyWith(
+                      fontSize: screenWidth > 600 ? 16 : 14, // Adjust font size for smaller screens
                     ),
-                  );
-                });
-              },
-              child: Text(
-                "See All",
-                style: AppTextStyles.seeAll,
+                  ),
+                ),
               ),
             ),
           ],
         ),
+        // ListView for applicants
         Container(
-          height: 200, // Adjust the height as needed
+          height: 300, // Adjust the height as needed
           child: ListView.builder(
             itemCount: applicants.length < 5
                 ? applicants.length

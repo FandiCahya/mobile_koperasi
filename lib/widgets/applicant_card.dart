@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../core/spacing.dart';
 import '../core/text_styles.dart';
 import '../core/colors.dart';
+import '../services/status_dialog.dart';  // Import file baru
 
 class ApplicantCard extends StatefulWidget {
   final IconData icon;
@@ -30,6 +31,11 @@ class _ApplicantCardState extends State<ApplicantCard> {
 
   String status = "pending"; // Status can be "pending", "accepted", or "rejected"
 
+  void initState() {
+    super.initState();
+    status = widget.status.toLowerCase(); // Initialize status from widget
+  }
+
   @override
   Widget build(BuildContext context) {
     // Check if the applicant already has a status (accepted/rejected)
@@ -42,30 +48,27 @@ class _ApplicantCardState extends State<ApplicantCard> {
 
     return GestureDetector(
       onTap: () {
-        _showDetailsDialog(context, status);
+        showDetailsDialog(context, widget.name, widget.amount, widget.creditScore, status, _updateApplicantStatus);
       },
       child: Card(
-        color: Colors.white, // Background putih
+        color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Icon di sebelah kiri
               Icon(
                 widget.icon,
                 color: widget.iconColor,
                 size: 40,
               ),
-              AppSpacing.heightMedium,
-              
-              // Informasi nama, amount, status, dan kredit score
+              AppSpacing.widthSmall,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nama dan amount di satu baris
+                    // Name and amount in one row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -80,19 +83,13 @@ class _ApplicantCardState extends State<ApplicantCard> {
                       ],
                     ),
                     AppSpacing.heightVerySmall,
-                    
-                    // Status di bawah nama
-                    Text(
-                      widget.status,
-                      style: AppTextStyles.skorKredit, // Gaya teks untuk status
-                    ),
+                    // Status below name
+                    _statusText(status),
                     AppSpacing.heightSmall,
-                    
-                    // Kredit Score (Progress Indicator)
                     Text("Kredit Score", style: AppTextStyles.skorKredit),
                     AppSpacing.heightVerySmall,
                     LinearProgressIndicator(
-                      value: widget.creditScore / 100, // Assumes creditScore is between 0 and 100
+                      value: widget.creditScore / 100,
                       color: AppColors.successColor,
                       backgroundColor: AppColors.errorColor,
                     ),
@@ -106,105 +103,44 @@ class _ApplicantCardState extends State<ApplicantCard> {
     );
   }
 
+  // Returns a styled text widget based on the applicant's status
+  Widget _statusText(String status) {
+    Color statusColor;
+    String displayStatus;
+
+    switch (status) {
+      case 'accepted':
+        statusColor = Colors.green;
+        displayStatus = "Diterima";
+        break;
+      case 'rejected':
+        statusColor = Colors.red;
+        displayStatus = "Ditolak";
+        break;
+      default:
+        statusColor = Colors.orange;
+        displayStatus = "Pending";
+    }
+
+    return Text(
+      displayStatus,
+      style: AppTextStyles.skorKredit.copyWith(color: statusColor),
+    );
+  }
+
   bool? _getApplicantStatus(String name) {
-    // Search for the applicant's status in the list
     for (var applicant in applicantStatus) {
       if (applicant['name'] == name) {
         return applicant['status'];
       }
     }
-    return null; // Return null if no status is found
+    return null;
   }
 
-  void _showDetailsDialog(BuildContext context, String currentStatus) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          contentPadding: EdgeInsets.all(16.0),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (currentStatus != "pending")
-                Center(
-                  child: Icon(
-                    currentStatus == "accepted" ? Icons.check_circle : Icons.cancel,
-                    color: currentStatus == "accepted" ? Colors.green : Colors.red,
-                    size: 40,
-                  ),
-                ),
-              SizedBox(height: 16),
-              Text("Detail Nasabah", style: AppTextStyles.pengajuanNasabah),
-              SizedBox(height: 16),
-              Text("Nama: ${widget.name}", style: AppTextStyles.namaNasabah),
-              Text("Jumlah: ${widget.amount}", style: AppTextStyles.namaNasabah),
-              SizedBox(height: 8),
-              Text("Kredit Score", style: AppTextStyles.skorKredit),
-              SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: widget.creditScore / 100,
-                color: AppColors.successColor,
-                backgroundColor: AppColors.errorColor,
-              ),
-              SizedBox(height: 16),
-              if (currentStatus == "pending") ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _updateApplicantStatus(widget.name, true);
-                        _showStatusDialog(context, true);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "Terima",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _updateApplicantStatus(widget.name, false);
-                        _showStatusDialog(context, false);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "Tolak",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _updateApplicantStatus(String name, bool isAccepted) {
+  void _updateApplicantStatus(bool isAccepted) {
     bool applicantExists = false;
     for (var applicant in applicantStatus) {
-      if (applicant['name'] == name) {
+      if (applicant['name'] == widget.name) {
         applicant['status'] = isAccepted;
         applicantExists = true;
         break;
@@ -212,44 +148,10 @@ class _ApplicantCardState extends State<ApplicantCard> {
     }
 
     if (!applicantExists) {
-      applicantStatus.add({'name': name, 'status': isAccepted});
+      applicantStatus.add({'name': widget.name, 'status': isAccepted});
     }
     setState(() {
       status = isAccepted ? "accepted" : "rejected";
     });
-  }
-
-  void _showStatusDialog(BuildContext context, bool isAccepted) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          contentPadding: EdgeInsets.all(16.0),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                isAccepted ? Icons.check_circle : Icons.cancel,
-                color: isAccepted ? Colors.green : Colors.red,
-                size: 40,
-              ),
-              SizedBox(height: 16),
-              Text(
-                isAccepted ? "Nasabah Diterima" : "Nasabah Ditolak",
-                style: TextStyle(
-                  color: isAccepted ? Colors.green : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }
