@@ -44,125 +44,133 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isSmallScreen = mediaQuery.size.width < 600;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Replace the SVG with PNG images
-                Image.asset(
-                  'assets/img/koperasi.png', // Path to the PNG image
-                  height: 150,
-                  width: 150,
-                ),
-                AppSpacing.heightExtraLarge,
-                Text(
-                  'Aplikasi Pengajuan Kredit KSP Berbasis Mobile',
-                  style: AppTextStyles.heading.copyWith(
-                    fontSize: 18, // Adjust the font size as needed
-                    fontWeight: FontWeight.bold,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: constraints.maxHeight * 0.1), // Spacer
+                      Image.asset(
+                        'assets/img/koperasi.png',
+                        height: 150,
+                        width: 150,
+                      ),
+                      AppSpacing.heightExtraLarge,
+                      Text(
+                        'Aplikasi Pengajuan Kredit KSP Berbasis Mobile',
+                        style: AppTextStyles.heading.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      AppSpacing.heightVeryLarge,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Sign In', style: AppTextStyles.heading),
+                      ),
+                      AppSpacing.heightVeryLarge,
+                      TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: AppTextStyles.label,
+                          prefixIcon: AppIcon.emailIcon,
+                          enabledBorder: AppBorder.enabledBorder,
+                          focusedBorder: AppBorder.focusedBorder,
+                        ),
+                      ),
+                      AppSpacing.heightLarge,
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: AppTextStyles.label,
+                          prefixIcon: AppIcon.passwordIcon,
+                          suffixIcon: IconButton(
+                            icon: AppIcon.visibilityIcon(_isPasswordVisible),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                          enabledBorder: AppBorder.enabledBorder,
+                          focusedBorder: AppBorder.focusedBorder,
+                        ),
+                      ),
+                      AppSpacing.heightMedium,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            // Add your "Forgot Password" functionality here
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: AppTextStyles.signUpText,
+                          ),
+                        ),
+                      ),
+                      AppSpacing.heightLarge,
+                      GestureDetector(
+                        onTap: () {
+                          _handleLogin(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: AppPadding.paddingVerticalMedium,
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Sign In',
+                            style: AppTextStyles.button,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: constraints.maxHeight * 0.1), // Spacer
+                    ],
                   ),
-                  textAlign:
-                      TextAlign.center, // This should be in the Text widget
                 ),
-
-                AppSpacing.heightVeryLarge,
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Sign In', style: AppTextStyles.heading),
+              ),
+              // Positioned logos in the top-left corner
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/img/polinema.png',
+                      fit: BoxFit.contain),
                 ),
-                AppSpacing.heightVeryLarge,
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: AppTextStyles.label,
-                    prefixIcon: AppIcon.emailIcon,
-                    enabledBorder: AppBorder.enabledBorder,
-                    focusedBorder: AppBorder.focusedBorder,
-                  ),
+              ),
+              Positioned(
+                top: 20,
+                left: 60,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/img/kemdikbud.png',
+                      fit: BoxFit.contain),
                 ),
-                AppSpacing.heightLarge,
-                TextField(
-                  controller: _passwordController,
-                  obscureText: !_isPasswordVisible,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: AppTextStyles.label,
-                    prefixIcon: AppIcon.passwordIcon,
-                    suffixIcon: IconButton(
-                      icon: AppIcon.visibilityIcon(_isPasswordVisible),
-                      onPressed: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
-                        });
-                      },
-                    ),
-                    enabledBorder: AppBorder.enabledBorder,
-                    focusedBorder: AppBorder.focusedBorder,
-                  ),
-                ),
-                AppSpacing.heightMedium,
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // Add your "Forgot Password" functionality here
-                    },
-                    child: Text(
-                      'Forgot Password?',
-                      style: AppTextStyles.signUpText,
-                    ),
-                  ),
-                ),
-                AppSpacing.heightLarge,
-                GestureDetector(
-                  onTap: () {
-                    _handleLogin(context);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: AppPadding.paddingVerticalMedium,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Sign In',
-                      style: AppTextStyles.button,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Positioned logos in the top-right corner
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Container(
-              width: 30,
-              height: 30,
-              child:
-                  Image.asset('assets/img/polinema.png', fit: BoxFit.contain),
-            ),
-          ),
-          Positioned(
-            top: 20,
-            left: 60,
-            child: Container(
-              width: 30,
-              height: 30,
-              child:
-                  Image.asset('assets/img/kemdikbud.png', fit: BoxFit.contain),
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
