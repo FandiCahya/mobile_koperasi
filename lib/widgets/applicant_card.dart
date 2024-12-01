@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import '../core/spacing.dart';
 import '../core/text_styles.dart';
-import '../core/colors.dart';
-import '../services/status_dialog.dart';  // Import file baru
+// import '../core/colors.dart';
+import '../services/status_dialog.dart'; // Import file baru
 
 class ApplicantCard extends StatefulWidget {
   final IconData icon;
   final Color iconColor;
+  final int idAnggota; // Add id_anggota as a parameter
   final String name;
-  final String status;
-  final String amount;
-  final double creditScore;
+  final String nilaiPinjaman;
+  final String statusPinjaman; // Status can be "Bagus" or "Buruk"
 
   ApplicantCard({
     required this.icon,
     required this.iconColor,
+    required this.idAnggota,
     required this.name,
-    required this.status,
-    required this.amount,
-    required this.creditScore,
+    required this.nilaiPinjaman,
+    required this.statusPinjaman,
   });
 
   @override
@@ -26,29 +26,19 @@ class ApplicantCard extends StatefulWidget {
 }
 
 class _ApplicantCardState extends State<ApplicantCard> {
-  // List to store applicant statuses
+  // List to store applicant statusPinjamanes
   static List<Map<String, dynamic>> applicantStatus = [];
-
-  String status = "pending"; // Status can be "pending", "accepted", or "rejected"
 
   void initState() {
     super.initState();
-    status = widget.status.toLowerCase(); // Initialize status from widget
   }
 
   @override
   Widget build(BuildContext context) {
-    // Check if the applicant already has a status (accepted/rejected)
-    bool? applicantStatusFlag = _getApplicantStatus(widget.name);
-
-    // Update status if it exists in the list
-    if (applicantStatusFlag != null) {
-      status = applicantStatusFlag ? "accepted" : "rejected";
-    }
-
     return GestureDetector(
       onTap: () {
-        showDetailsDialog(context, widget.name, widget.amount, widget.creditScore, status, _updateApplicantStatus);
+        showDetailsDialog(
+            context, widget.name, widget.nilaiPinjaman, widget.statusPinjaman);
       },
       child: Card(
         color: Colors.white,
@@ -68,7 +58,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Name and amount in one row
+                    // Displaying id_anggota, name, and nilaiPinjaman
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -77,22 +67,14 @@ class _ApplicantCardState extends State<ApplicantCard> {
                           style: AppTextStyles.namaNasabah,
                         ),
                         Text(
-                          widget.amount,
+                          widget.statusPinjaman,
                           style: AppTextStyles.namaNasabah,
                         ),
                       ],
                     ),
-                    AppSpacing.heightVerySmall,
-                    // Status below name
-                    _statusText(status),
                     AppSpacing.heightSmall,
-                    Text("Kredit Score", style: AppTextStyles.skorKredit),
-                    AppSpacing.heightVerySmall,
-                    LinearProgressIndicator(
-                      value: widget.creditScore / 100,
-                      color: AppColors.successColor,
-                      backgroundColor: AppColors.errorColor,
-                    ),
+                    _buildPinjamanInfo(),
+                    AppSpacing.heightSmall,
                   ],
                 ),
               ),
@@ -103,19 +85,35 @@ class _ApplicantCardState extends State<ApplicantCard> {
     );
   }
 
+  Widget _buildPinjamanInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Nilai Pinjaman:",
+          style: AppTextStyles.skorKredit,
+        ),
+        Text(
+          widget.nilaiPinjaman,
+          style: AppTextStyles.skorKredit,
+        ),
+      ],
+    );
+  }
+
   // Returns a styled text widget based on the applicant's status
   Widget _statusText(String status) {
     Color statusColor;
     String displayStatus;
 
     switch (status) {
-      case 'accepted':
+      case 'bagus':
         statusColor = Colors.green;
-        displayStatus = "Diterima";
+        displayStatus = "Bagus";
         break;
-      case 'rejected':
+      case 'buruk':
         statusColor = Colors.red;
-        displayStatus = "Ditolak";
+        displayStatus = "Buruk";
         break;
       default:
         statusColor = Colors.orange;
@@ -135,23 +133,5 @@ class _ApplicantCardState extends State<ApplicantCard> {
       }
     }
     return null;
-  }
-
-  void _updateApplicantStatus(bool isAccepted) {
-    bool applicantExists = false;
-    for (var applicant in applicantStatus) {
-      if (applicant['name'] == widget.name) {
-        applicant['status'] = isAccepted;
-        applicantExists = true;
-        break;
-      }
-    }
-
-    if (!applicantExists) {
-      applicantStatus.add({'name': widget.name, 'status': isAccepted});
-    }
-    setState(() {
-      status = isAccepted ? "accepted" : "rejected";
-    });
   }
 }

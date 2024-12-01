@@ -5,11 +5,11 @@ import 'AllSubmissionPage.dart'; // Sesuaikan jika Anda memiliki halaman detail 
 
 class SubmissionSection extends StatelessWidget {
   final List<Map<String, dynamic>> submissions = [
-    {"tgl": DateTime.now(), "name": "John Doe", "amount": "Rp10,000,000"},
-    {"tgl": DateTime.now().subtract(Duration(days: 1)), "name": "Jane Smith", "amount": "Rp8,000,000"},
-    {"tgl": DateTime.now().subtract(Duration(days: 2)), "name": "Alex Brown", "amount": "Rp15,000,000"},
-    {"tgl": DateTime.now().subtract(Duration(days: 3)), "name": "Emily Davis", "amount": "Rp12,000,000"},
-    {"tgl": DateTime.now().subtract(Duration(days: 4)), "name": "Chris Johnson", "amount": "Rp9,500,000"},
+    {"nilaiPinjaman": "Rp10,000,000","statusPinjaman":"Sesuai"},
+    {"nilaiPinjaman": "Rp8,000,000","statusPinjaman":"Tidak Sesuai"},
+    {"nilaiPinjaman": "Rp15,000,000","statusPinjaman":"Sesuai"},
+    {"nilaiPinjaman": "Rp12,000,000","statusPinjaman":"Tidak Sesuai"},
+    {"nilaiPinjaman": "Rp9,500,000","statusPinjaman":"Sesuai"},
   ];
 
   @override
@@ -20,7 +20,7 @@ class SubmissionSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Pengajuan Kredit",
+              "Penawaran Kredit",
               style: AppTextStyles.pengajuanNasabah,
             ),
             TextButton(
@@ -43,7 +43,7 @@ class SubmissionSection extends StatelessWidget {
           ],
         ),
         Container(
-          height: 200, // Adjust the height as needed
+          height: MediaQuery.of(context).size.height * 0.5,
           child: ListView.builder(
             itemCount: submissions.length < 5
                 ? submissions.length
@@ -53,9 +53,8 @@ class SubmissionSection extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SubmissionCard(
-                  tgl: submission["tgl"],
-                  name: submission["name"],
-                  amount: submission["amount"],
+                  nilaiPinjaman: submission["nilaiPinjaman"],
+                  statusPinjaman: submission["statusPinjaman"],
                 ),
               );
             },

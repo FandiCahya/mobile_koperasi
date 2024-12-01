@@ -21,36 +21,44 @@ class HeaderWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: AppColors.dashboardBackground, // Use the background color #775EFA
+        color:
+            AppColors.dashboardBackground, // Use the background color #775EFA
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Column containing greeting and name
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                greeting,
-                style: TextStyle(
-                  fontSize: screenWidth > 600 ? 16 : 14, // Adjust text size for smaller screens
-                  color: Colors.white70,
-                  fontWeight: FontWeight.w400,
+          Expanded(
+            // Wrap with Expanded to use remaining space
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  greeting,
+                  style: TextStyle(
+                    fontSize: screenWidth > 600
+                        ? 16
+                        : 14, // Adjust text size for smaller screens
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: screenWidth > 600 ? 24 : 20, // Adjust font size for smaller screens
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                SizedBox(height: 4),
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: screenWidth > 600
+                        ? 24
+                        : 20, // Adjust font size for smaller screens
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          // Use a responsive CircleAvatar
+          // CircleAvatar
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -64,10 +72,14 @@ class HeaderWidget extends StatelessWidget {
               );
             },
             child: CircleAvatar(
-              radius: screenWidth > 600 ? 24 : 20, // Adjust CircleAvatar size based on screen width
+              radius: screenWidth > 600
+                  ? 24
+                  : 20, // Adjust CircleAvatar size based on screen width
               backgroundColor: AppColors.card2,
               child: CircleAvatar(
-                radius: screenWidth > 600 ? 22 : 18, // Inner CircleAvatar size adjustment
+                radius: screenWidth > 600
+                    ? 22
+                    : 18, // Inner CircleAvatar size adjustment
                 backgroundImage: AssetImage(profileImagePath),
               ),
             ),

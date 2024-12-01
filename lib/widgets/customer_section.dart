@@ -6,13 +6,68 @@ import 'AllCustomersPage.dart';
 
 class CustomerSection extends StatelessWidget {
   final List<Map<String, dynamic>> customers = [
-    {"name": "Nasabah 1", "creditScore": 0.9},
-    {"name": "Nasabah 2", "creditScore": 0.7},
-    {"name": "Nasabah 3", "creditScore": 0.6},
-    {"name": "Nasabah 4", "creditScore": 0.8},
-    {"name": "Nasabah 5", "creditScore": 0.5},
-    {"name": "Nasabah 6", "creditScore": 0.85},
-  ];
+  {
+    "name": "Nasabah 1",
+    "jenis_kelamin": "Laki-Laki",
+    "status": "Menikah",
+    "tanggungan": 2,
+    "pendidikan": "Sarjana",
+    "status_karyawan": "Karyawan Tetap",
+    "gaji": "Rp12.000.000",
+    "properti": "Rumah, Mobil"
+  },
+  {
+    "name": "Nasabah 2",
+    "jenis_kelamin": "Perempuan",
+    "status": "Lajang",
+    "tanggungan": 0,
+    "pendidikan": "Diploma",
+    "status_karyawan": "Freelancer",
+    "gaji": "Rp6.000.000",
+    "properti": "Motor"
+  },
+  {
+    "name": "Nasabah 3",
+    "jenis_kelamin": "Laki-Laki",
+    "status": "Cerai",
+    "tanggungan": 1,
+    "pendidikan": "SMA",
+    "status_karyawan": "Wiraswasta",
+    "gaji": "Rp8.000.000",
+    "properti": "Rumah"
+  },
+  {
+    "name": "Nasabah 4",
+    "jenis_kelamin": "Perempuan",
+    "status": "Menikah",
+    "tanggungan": 3,
+    "pendidikan": "Sarjana",
+    "status_karyawan": "Karyawan Kontrak",
+    "gaji": "Rp10.000.000",
+    "properti": "Apartemen, Mobil"
+  },
+  {
+    "name": "Nasabah 5",
+    "jenis_kelamin": "Laki-Laki",
+    "status": "Lajang",
+    "tanggungan": 0,
+    "pendidikan": "Diploma",
+    "status_karyawan": "Karyawan Tetap",
+    "gaji": "Rp7.000.000",
+    "properti": "Motor"
+  },
+  {
+    "name": "Nasabah 6",
+    "jenis_kelamin": "Perempuan",
+    "status": "Menikah",
+    "tanggungan": 2,
+    "pendidikan": "Magister",
+    "status_karyawan": "Karyawan Tetap",
+    "gaji": "Rp15.000.000",
+    "properti": "Rumah, Mobil, Tanah"
+  },
+];
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +78,7 @@ class CustomerSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "List Nasabah",
+              "List Anggota",
               style: AppTextStyles.pengajuanNasabah,
             ),
             TextButton(
@@ -44,7 +99,7 @@ class CustomerSection extends StatelessWidget {
         ),
         AppSpacing.heightHigh,
         SizedBox(
-          height: 150, // Tinggi widget untuk setiap item nasabah
+          height: 100, // Tinggi widget untuk setiap item nasabah
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: customers.length < 5 ? customers.length : 5, // Limit to 5 items for preview
@@ -52,7 +107,13 @@ class CustomerSection extends StatelessWidget {
               final customer = customers[index];
               return CustomerCard(
                 name: customer['name'],
-                creditScore: customer['creditScore'],
+                jenisKelamin: customer['jenis_kelamin'],
+                status: customer['status'],
+                tanggungan: customer['tanggungan'],
+                pendidikan: customer['pendidikan'],
+                statusKaryawan: customer['status_karyawan'],
+                gaji: customer['gaji'],
+                properti: customer['properti'],
               );
             },
           ),

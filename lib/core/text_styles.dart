@@ -40,5 +40,9 @@ class AppTextStyles {
   );
   static TextStyle skorKredit  = GoogleFonts.poppins(
     fontSize: 13
-  );        
+  ); 
+  static TextStyle details  = GoogleFonts.poppins(
+    fontSize: 16
+  );
+         
 }

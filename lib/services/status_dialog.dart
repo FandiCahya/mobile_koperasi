@@ -1,6 +1,7 @@
-// lib/utils/status_dialog.dart
-
 import 'package:flutter/material.dart';
+import '../core/spacing.dart';
+import '../core/text_styles.dart';
+import '../core/padding.dart';
 
 void showStatusDialog(BuildContext context, bool isAccepted) {
   showDialog(
@@ -10,7 +11,7 @@ void showStatusDialog(BuildContext context, bool isAccepted) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        contentPadding: EdgeInsets.all(16.0),
+        contentPadding: AppPadding.paddingMedium,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -20,9 +21,9 @@ void showStatusDialog(BuildContext context, bool isAccepted) {
               color: isAccepted ? Colors.green : Colors.red,
               size: 40,
             ),
-            SizedBox(height: 16),
+            AppSpacing.heightHigh,
             Text(
-              isAccepted ? "Nasabah Diterima" : "Nasabah Ditolak",
+              isAccepted ? "Anggota Diterima" : "Anggota Ditolak",
               style: TextStyle(
                 color: isAccepted ? Colors.green : Colors.red,
                 fontWeight: FontWeight.bold,
@@ -36,7 +37,7 @@ void showStatusDialog(BuildContext context, bool isAccepted) {
   );
 }
 
-void showDetailsDialog(BuildContext context, String name, String amount, double creditScore, String currentStatus, Function updateStatus) {
+void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, String statusPinjaman) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -44,45 +45,28 @@ void showDetailsDialog(BuildContext context, String name, String amount, double 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        contentPadding: EdgeInsets.all(16.0),
+        contentPadding: AppPadding.paddingMedium,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (currentStatus != "pending")
-              Center(
-                child: Icon(
-                  currentStatus == "accepted" ? Icons.check_circle : Icons.cancel,
-                  color: currentStatus == "accepted" ? Colors.green : Colors.red,
-                  size: 40,
-                ),
-              ),
-            SizedBox(height: 16),
-            Text("Detail Nasabah", style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 16),
-            Text("Nama: $name", style: TextStyle(fontSize: 16)),
-            Text("Jumlah: $amount", style: TextStyle(fontSize: 16)),
-            SizedBox(height: 8),
-            Text("Kredit Score", style: TextStyle(fontSize: 14)),
-            SizedBox(height: 8),
-            LinearProgressIndicator(
-              value: creditScore / 100,
-              color: Colors.green,
-              backgroundColor: Colors.red,
-            ),
-            SizedBox(height: 16),
-            if (currentStatus == "pending") ...[
+            AppSpacing.heightHigh,
+            Text("Detail Pengajuan", style: AppTextStyles.namaNasabah),
+            AppSpacing.heightHigh,
+            Text("Nama: $name", style: AppTextStyles.details),
+            Text("Jumlah: $nilaiPinjaman", style: AppTextStyles.details),
+            Text("Status: $statusPinjaman", style: AppTextStyles.details),
+            AppSpacing.heightHigh,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      updateStatus(true);
                       showStatusDialog(context, true);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: AppPadding.custom1,
                       decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(8),
@@ -96,11 +80,10 @@ void showDetailsDialog(BuildContext context, String name, String amount, double 
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      updateStatus(false);
                       showStatusDialog(context, false);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: AppPadding.custom1,
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
@@ -114,7 +97,6 @@ void showDetailsDialog(BuildContext context, String name, String amount, double 
                 ],
               ),
             ],
-          ],
         ),
       );
     },

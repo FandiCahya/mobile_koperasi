@@ -20,7 +20,7 @@ class AdminDashboard extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: HeaderWidget(
               greeting: "Hello, Welcome 👋",
-              name: "Admin $adminName",
+              name: "- $adminName",
               profileImagePath: 'assets/img/man.png',
             ),
           ),

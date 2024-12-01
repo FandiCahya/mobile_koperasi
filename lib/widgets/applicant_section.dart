@@ -6,12 +6,38 @@ import 'AllApplicantsPage.dart';
 
 class ApplicantSection extends StatelessWidget {
   final List<Map<String, dynamic>> applicants = [
-    {"name": "John Doe", "amount": "Rp10,000,000", "creditScore": 80.0, "status": "Pending"},
-    {"name": "Jane Smith", "amount": "Rp8,000,000", "creditScore": 65.0, "status": "Pending"},
-    {"name": "Alex Brown", "amount": "Rp15,000,000", "creditScore": 90.0, "status": "Approved"},
-    {"name": "Emily Davis", "amount": "Rp12,000,000", "creditScore": 70.0, "status": "Pending"},
-    {"name": "Chris Johnson", "amount": "Rp9,500,000", "creditScore": 60.0, "status": "Rejected"},
-  ];
+  {
+    "idAnggota": 1,
+    "name": "John Doe",
+    "nilai_pinjaman": "Rp10,000,000",
+    "status_pinjaman": "Buruk",
+  },
+  {
+    "idAnggota": 2,
+    "name": "Jane Smith",
+    "nilai_pinjaman": "Rp8,000,000",
+    "status_pinjaman": "Baik",
+  },
+  {
+    "idAnggota": 3,
+    "name": "Alex Brown",
+    "nilai_pinjaman": "Rp15,000,000",
+    "status_pinjaman": "Buruk",
+  },
+  {
+    "idAnggota": 4,
+    "name": "Emily Davis",
+    "nilai_pinjaman": "Rp12,000,000",
+    "status_pinjaman": "Baik",
+  },
+  {
+    "idAnggota": 5,
+    "name": "Chris Johnson",
+    "nilai_pinjaman": "Rp9,500,000",
+    "status_pinjaman": "Baik",
+  },
+];
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +51,7 @@ class ApplicantSection extends StatelessWidget {
           children: [
             // Title Text
             Text(
-              "Nasabah yang Mengajukan",
+              "List Pengajuan",
               style: AppTextStyles.pengajuanNasabah,
             ),
             // Flexible "See All" Button to prevent overflow
@@ -69,10 +95,10 @@ class ApplicantSection extends StatelessWidget {
                 child: ApplicantCard(
                   icon: Icons.person, // Set a default icon for all applicants
                   iconColor: AppColors.primaryColor, // Set a default icon color
+                  idAnggota: applicant['idAnggota'],
                   name: applicant["name"],
-                  amount: applicant["amount"],
-                  creditScore: applicant["creditScore"],
-                  status: applicant["status"], // Added status field
+                  nilaiPinjaman: applicant["nilai_pinjaman"],
+                  statusPinjaman: applicant["status_pinjaman"],
                 ),
               );
             },

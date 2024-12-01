@@ -10,21 +10,24 @@ class AllApplicantsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Nasabah yang Mengajukan'),
+        title: Text('List Pengajuan'),
       ),
       body: ListView.builder(
-        itemCount: applicants.length, // Sesuaikan dengan jumlah nasabah yang mengajukan
+        itemCount: applicants
+            .length, // Sesuaikan dengan jumlah nasabah yang mengajukan
         itemBuilder: (context, index) {
           final applicant = applicants[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: ApplicantCard(
-              icon: Icons.person, // Menambahkan icon default untuk setiap applicant
+              icon: Icons
+                  .person, // Menambahkan icon default untuk setiap applicant
               iconColor: Colors.blue, // Menambahkan warna icon default
-              name: applicant['name'],
-              status: applicant['status'] ?? "Pending", // Menambahkan status dengan nilai default "Pending" jika null
-              amount: applicant['amount'],
-              creditScore: applicant['creditScore'],
+              idAnggota: applicant['idAnggota'],
+              name: applicant["name"],
+              nilaiPinjaman: applicant["nilai_pinjaman"],
+              statusPinjaman: applicant["status_pinjaman"],
             ),
           );
         },

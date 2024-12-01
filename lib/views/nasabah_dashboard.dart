@@ -3,7 +3,7 @@ import '../core/colors.dart';
 import '../widgets/header_widget.dart';
 import '../core/spacing.dart';
 import '../widgets/submission_section.dart';
-import '../widgets/skor_kredit.dart';
+import '../widgets/pengajuan.dart';
 
 class NasabahDashboard extends StatelessWidget {
   final String customerName;
@@ -26,7 +26,7 @@ class NasabahDashboard extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: HeaderWidget(
               greeting: "Hello, Welcome 👋",
-              name: "Nasabah $customerName",
+              name: "- $customerName",
               profileImagePath: 'assets/img/man.png',
             ),
           ),
@@ -46,10 +46,7 @@ class NasabahDashboard extends StatelessWidget {
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
-                    SkorKreditSection(
-                      customerName: customerName,
-                      balance: balance,
-                      creditScore: creditScore,
+                    PengajuanSection(
                     ),
                   ],
                 ),

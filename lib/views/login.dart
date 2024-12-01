@@ -29,12 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
       password: "admin123",
     ),
     User(
-      name: "Nasabah Suprapto",
-      role: "nasabah",
+      name: "Suprapto",
+      role: "anggota",
       jumlah: 5000000,
       skorkredit: 70,
-      email: "nasabah@gmail.com",
-      password: "nasabah123",
+      email: "anggota@gmail.com",
+      password: "anggota123",
     ),
   ];
 
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final isSmallScreen = mediaQuery.size.width < 600;
+    // final isSmallScreen = mediaQuery.size.width < 600;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -180,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    print("Email: $email, Password: $password"); // Debug print
+    // print("Email: $email, Password: $password"); // Debug print
 
     // Search for a user with matching email and password
     User? loggedInUser = users.firstWhereOrNull(
@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (loggedInUser != null) {
-      print("User found: ${loggedInUser.name}"); // Debug print
+      // print("User found: ${loggedInUser.name}"); // Debug print
 
       // Navigate based on user role
       if (loggedInUser.role == "admin") {
@@ -198,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (context) => AdminDashboard(adminName: loggedInUser.name),
           ),
         );
-      } else if (loggedInUser.role == "nasabah") {
+      } else if (loggedInUser.role == "anggota") {
         Navigator.push(
           context,
           MaterialPageRoute(

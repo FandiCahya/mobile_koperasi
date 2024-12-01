@@ -12,6 +12,12 @@ class AppIcon {
     color: AppColors.primaryColor,
   );
 
+  static const Icon moneyIcon = Icon(
+    Icons.attach_money,
+    color: AppColors.primaryColor,
+    size: 40, // Ukuran besar untuk ikon
+  );
+
   static Icon visibilityIcon(bool isVisible) => Icon(
         isVisible ? Icons.visibility : Icons.visibility_off,
         color: Colors.grey,

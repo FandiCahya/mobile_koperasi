@@ -19,9 +19,8 @@ class AllSubmissionsPage extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: SubmissionCard(
-              tgl: submission['tgl'],
-              name: submission['name'],
-              amount: submission['amount'],
+              nilaiPinjaman: submission['nilaiPinjaman'],
+              statusPinjaman: submission['statusPinjaman'],
             ),
           );
         },
