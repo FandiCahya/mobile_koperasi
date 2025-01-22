@@ -6,6 +6,8 @@ import '../core/padding.dart';
 import 'PengajuanKreditForm.dart';
 
 class PengajuanSection extends StatelessWidget {
+  final String idAnggota;
+  PengajuanSection({required this.idAnggota});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,7 +35,7 @@ class PengajuanSection extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PengajuanKreditForm()),
+                          builder: (context) => PengajuanKreditForm(idAnggota: idAnggota)),
                     );
                   },
                   child: Text(

@@ -3,12 +3,35 @@ import '../core/colors.dart';
 import '../widgets/header_widget.dart';
 import '../widgets/applicant_section.dart';
 import '../widgets/customer_section.dart';
+import '../widgets/offerpage.dart';
 import '../core/spacing.dart';
+import '../widgets/adduser.dart';
 
 class AdminDashboard extends StatelessWidget {
+  final String idAnggota;
   final String adminName;
+  final String email;
+  final String jenisKelamin;
+  final String statusMenikah;
+  final int tanggungan;
+  final String pendidikan;
+  final String statusKaryawan;
+  final int gaji;
+  final String properti;
+  final String role;
 
-  AdminDashboard({required this.adminName});
+  AdminDashboard(
+      {required this.idAnggota,
+      required this.adminName,
+      required this.email,
+      required this.jenisKelamin,
+      required this.statusMenikah,
+      required this.tanggungan,
+      required this.pendidikan,
+      required this.statusKaryawan,
+      required this.gaji,
+      required this.properti,
+      required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +64,55 @@ class AdminDashboard extends StatelessWidget {
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
                     CustomerSection(),
+                    AppSpacing.heightHigh,
+                    Divider(thickness: 1, color: Colors.grey[300]),
+                    AppSpacing.heightHigh,
+                    // Button: Tambah Penawaran
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 12.0, horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TambahPenawaranView()),
+                          );
+                        },
+                        child: Text(
+                          'Tambah Penawaran',
+                          style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                    AppSpacing.heightMedium,
+
+                    // Button: Tambah Anggota
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 12.0, horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TambahAnggotaView()),
+                          );
+                        },
+                        child: Text(
+                          'Tambah Anggota',
+                          style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

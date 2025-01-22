@@ -37,7 +37,7 @@ void showStatusDialog(BuildContext context, bool isAccepted) {
   );
 }
 
-void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, String statusPinjaman) {
+void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman,String waktuPinjaman,String historiPinjaman, String statusPinjaman) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -51,10 +51,12 @@ void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, 
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppSpacing.heightHigh,
-            Text("Detail Pengajuan Distribusi Kredit", style: AppTextStyles.namaNasabah),
+            Text("Detail Pengajuan Resiko Kredit", style: AppTextStyles.namaNasabah),
             AppSpacing.heightHigh,
             Text("Nama: $name", style: AppTextStyles.details),
             Text("Jumlah: $nilaiPinjaman", style: AppTextStyles.details),
+            Text("Waktu: $waktuPinjaman", style: AppTextStyles.details),
+            Text("Histori: $historiPinjaman", style: AppTextStyles.details),
             Text("Status: $statusPinjaman", style: AppTextStyles.details),
             AppSpacing.heightHigh,
               Row(

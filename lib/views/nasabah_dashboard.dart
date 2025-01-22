@@ -6,15 +6,30 @@ import '../widgets/submission_section.dart';
 import '../widgets/pengajuan.dart';
 
 class NasabahDashboard extends StatelessWidget {
-  final String customerName;
-  final double balance;
-  final double creditScore;
+  final String idAnggota;
+  final String anggotaName;
+  final String email;
+  final String jenisKelamin;
+  final String statusMenikah;
+  final int tanggungan;
+  final String pendidikan;
+  final String statusKaryawan;
+  final int gaji;
+  final String properti;
+  final String role;
 
-  NasabahDashboard({
-    required this.customerName,
-    required this.balance,
-    required this.creditScore,
-  });
+  NasabahDashboard(
+      {required this.idAnggota,
+      required this.anggotaName,
+      required this.email,
+      required this.jenisKelamin,
+      required this.statusMenikah,
+      required this.tanggungan,
+      required this.pendidikan,
+      required this.statusKaryawan,
+      required this.gaji,
+      required this.properti,
+      required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +41,7 @@ class NasabahDashboard extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: HeaderWidget(
               greeting: "Hello, Welcome 👋",
-              name: "- $customerName",
+              name: "- $anggotaName",
               profileImagePath: 'assets/img/man.png',
             ),
           ),
@@ -42,12 +57,11 @@ class NasabahDashboard extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SubmissionSection(),
+                    SubmissionSection(idAnggota: idAnggota),
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
-                    PengajuanSection(
-                    ),
+                    PengajuanSection(idAnggota: idAnggota),
                   ],
                 ),
               ),

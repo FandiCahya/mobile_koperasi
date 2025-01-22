@@ -10,7 +10,7 @@ class AllCustomersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Semua Anggota'),
+        title: Text('Daftar Semua Resiko Kredit'),
       ),
       body: ListView.builder(
         itemCount: customers.length,
@@ -20,14 +20,12 @@ class AllCustomersPage extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: CustomerCard(
+              idAnggota: customer['id_anggota'],
               name: customer['name'],
-              jenisKelamin: customer['jenis_kelamin'],
-              status: customer['status'],
-              tanggungan: customer['tanggungan'],
-              pendidikan: customer['pendidikan'],
-              statusKaryawan: customer['status_karyawan'],
-              gaji: customer['gaji'],
-              properti: customer['properti'],
+              nilaiPinjaman: customer['nilai_pinjaman'],
+              waktuPinjaman: customer['waktu_pinjaman'],
+              historiPinjaman: customer['histori_pinjaman'],
+              statusPinjaman: customer['status_pinjaman'],
             ),
           );
         },

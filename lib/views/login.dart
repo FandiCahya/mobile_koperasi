@@ -9,6 +9,9 @@ import '../models/user.dart';
 import 'admin_dashboard.dart';
 import 'nasabah_dashboard.dart';
 import 'package:collection/collection.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../core/api_config.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,34 +21,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
 
-  // Sample users for login validation
-  final List<User> users = [
-    User(
-      name: "Admin User",
-      role: "admin",
-      jumlah: 0,
-      skorkredit: 0,
-      email: "admin@gmail.com",
-      password: "admin123",
-    ),
-    User(
-      name: "Suprapto",
-      role: "anggota",
-      jumlah: 5000000,
-      skorkredit: 70,
-      email: "anggota@gmail.com",
-      password: "anggota123",
-    ),
-  ];
-
   // Controllers for email and password fields
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    // final isSmallScreen = mediaQuery.size.width < 600;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -62,8 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: constraints.maxHeight * 0.1), // Spacer
                       Image.asset(
                         'assets/img/koperasi.png',
-                        height: 150,
-                        width: 150,
+                        height: MediaQuery.of(context).size.height *
+                            0.2, // 20% dari tinggi layar
+                        width: MediaQuery.of(context).size.width * 0.4,
                       ),
                       AppSpacing.heightExtraLarge,
                       Text(
@@ -149,21 +133,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               // Positioned logos in the top-left corner
               Positioned(
-                top: 20,
-                left: 20,
+                top: screenHeight * 0.05, // 5% dari tinggi layar
+                left: screenWidth * 0.1,
                 child: Container(
-                  width: 30,
-                  height: 30,
+                  width: screenWidth * 0.1, // 10% dari lebar layar
+                  height: screenWidth *
+                      0.1, // Sesuai dengan lebar agar proporsional
                   child: Image.asset('assets/img/polinema.png',
                       fit: BoxFit.contain),
                 ),
               ),
               Positioned(
-                top: 20,
-                left: 60,
+                top: screenHeight * 0.05, // 5% dari tinggi layar
+                right: screenWidth * 0.1,
                 child: Container(
-                  width: 30,
-                  height: 30,
+                  width: screenWidth * 0.1, // 10% dari lebar layar
+                  height: screenWidth *
+                      0.1, // Sesuai dengan lebar agar proporsional
                   child: Image.asset('assets/img/kemdikbud.png',
                       fit: BoxFit.contain),
                 ),
@@ -176,59 +162,98 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Function to handle login and navigate based on user role
-  void _handleLogin(BuildContext context) {
+  void _handleLogin(BuildContext context) async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    // print("Email: $email, Password: $password"); // Debug print
+    // URL endpoint API login
+    final url = Uri.parse(ApiConfig.loginEndpoint); // Sesuaikan URL API
 
-    // Search for a user with matching email and password
-    User? loggedInUser = users.firstWhereOrNull(
-      (user) => user.email == email && user.password == password,
-    );
+    try {
+      // Kirim request ke server
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"email": email, "password": password}),
+      );
 
-    if (loggedInUser != null) {
-      // print("User found: ${loggedInUser.name}"); // Debug print
+      // Decode response JSON
+      final responseData = jsonDecode(response.body);
 
-      // Navigate based on user role
-      if (loggedInUser.role == "admin") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AdminDashboard(adminName: loggedInUser.name),
-          ),
-        );
-      } else if (loggedInUser.role == "anggota") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NasabahDashboard(
-              customerName: loggedInUser.name,
-              balance: loggedInUser.jumlah,
-              creditScore: loggedInUser.skorkredit,
+      if (responseData["status"] == "success") {
+        final role = responseData["role"];
+        final name = responseData["name"];
+        final idAnggota = responseData["id_anggota"];
+        final email = responseData["email"];
+        final jenisKelamin = responseData["jenis_kelamin"];
+        final statusMenikah = responseData["status_menikah"];
+        final tanggungan = responseData["tanggungan"];
+        final pendidikan = responseData["pendidikan"];
+        final statusKaryawan = responseData["status_karyawan"];
+        final gaji = responseData["gaji"];
+        final properti = responseData["properti"];
+        // Navigasi berdasarkan role
+        if (role == "admin") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminDashboard(
+                adminName: name,
+                idAnggota: idAnggota,
+                email: email,
+                jenisKelamin: jenisKelamin,
+                statusMenikah: statusMenikah,
+                tanggungan: tanggungan,
+                pendidikan: pendidikan,
+                statusKaryawan: statusKaryawan,
+                gaji: gaji,
+                properti: properti,
+                role: role,
+              ),
             ),
-          ),
-        );
+          );
+        } else if (role == "anggota") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NasabahDashboard(
+                anggotaName: name,
+                idAnggota: idAnggota,
+                email: email,
+                jenisKelamin: jenisKelamin,
+                statusMenikah: statusMenikah,
+                tanggungan: tanggungan,
+                pendidikan: pendidikan,
+                statusKaryawan: statusKaryawan,
+                gaji: gaji,
+                properti: properti,
+                role: role,
+              ),
+            ),
+          );
+        }
+      } else {
+        // Tampilkan error jika login gagal
+        _showErrorDialog(context, responseData["message"]);
       }
-    } else {
-      print("No user found with these credentials."); // Debug print
-      // Show error dialog if login fails
-      _showErrorDialog(context);
+    } catch (error) {
+      // Tampilkan error jika terjadi kesalahan koneksi
+      _showErrorDialog(context, "Terjadi kesalahan. Silakan coba lagi.");
     }
   }
 
-  // Function to show error dialog if login fails
-  void _showErrorDialog(BuildContext context) {
+// Fungsi untuk menampilkan dialog error
+  void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Login Failed"),
-          content: Text("Invalid email or password. Please try again."),
+          title: Text("Login Gagal"),
+          content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("OK"),
             ),

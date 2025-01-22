@@ -24,7 +24,7 @@ class AllApplicantsPage extends StatelessWidget {
               icon: Icons
                   .person, // Menambahkan icon default untuk setiap applicant
               iconColor: Colors.blue, // Menambahkan warna icon default
-              idAnggota: applicant['idAnggota'],
+              idAnggota: applicant['id_anggota'],
               name: applicant["name"],
               nilaiPinjaman: applicant["nilai_pinjaman"],
               statusPinjaman: applicant["status_pinjaman"],

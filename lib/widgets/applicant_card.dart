@@ -7,7 +7,7 @@ import '../services/status_dialog.dart'; // Import file baru
 class ApplicantCard extends StatefulWidget {
   final IconData icon;
   final Color iconColor;
-  final int idAnggota; // Add id_anggota as a parameter
+  final String idAnggota; // Add id_anggota as a parameter
   final String name;
   final String nilaiPinjaman;
   final String statusPinjaman; // Status can be "Bagus" or "Buruk"
@@ -26,7 +26,6 @@ class ApplicantCard extends StatefulWidget {
 }
 
 class _ApplicantCardState extends State<ApplicantCard> {
-  // List to store applicant statusPinjamanes
   static List<Map<String, dynamic>> applicantStatus = [];
 
   void initState() {
@@ -58,7 +57,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Displaying id_anggota, name, and nilaiPinjaman
+                    // Displaying id_anggota, name, and statusPinjaman
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -86,22 +85,28 @@ class _ApplicantCardState extends State<ApplicantCard> {
   }
 
   Widget _buildPinjamanInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Nilai Pinjaman:",
-          style: AppTextStyles.skorKredit,
+        // Nilai Pinjaman
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Nilai Pinjaman:",
+              style: AppTextStyles.skorKredit,
+            ),
+            Text(
+              widget.nilaiPinjaman,
+              style: AppTextStyles.skorKredit,
+            ),
+          ],
         ),
-        Text(
-          widget.nilaiPinjaman,
-          style: AppTextStyles.skorKredit,
-        ),
+        AppSpacing.heightSmall,
       ],
     );
   }
 
-  // Returns a styled text widget based on the applicant's status
   Widget _statusText(String status) {
     Color statusColor;
     String displayStatus;

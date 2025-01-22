@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import '../core/spacing.dart';
 import '../core/text_styles.dart';
 import '../core/icon.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../core/api_config.dart';
+import '../core/spacing.dart';
 
 class SubmissionCard extends StatelessWidget {
-  final String nilaiPinjaman;
-  final String statusPinjaman;
+  final String idAnggota;
+  final String idPenawaran;
+  final String penawaran;
 
   SubmissionCard({
-    required this.nilaiPinjaman,
-    required this.statusPinjaman,
+    required this.idAnggota,
+    required this.idPenawaran,
+    required this.penawaran,
   });
 
   @override
@@ -34,12 +39,7 @@ class SubmissionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      nilaiPinjaman,
-                      style: AppTextStyles.namaNasabah,
-                    ),
-                    AppSpacing.heightVerySmall,
-                    Text(
-                      statusPinjaman,
+                      penawaran,
                       style: AppTextStyles.namaNasabah,
                     ),
                   ],
@@ -69,51 +69,78 @@ class SubmissionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Nilai Pinjaman: $nilaiPinjaman",
+                "Nilai Pinjaman: $penawaran",
                 style: AppTextStyles.label,
               ),
               AppSpacing.heightSmall,
-              Text(
-                "Status Pinjaman: $statusPinjaman",
-                style: AppTextStyles.label,
-              ),
-              AppSpacing.heightHigh,
               Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    color: statusPinjaman == "Sesuai"
-                        ? Colors.blue
-                        : Colors.grey, // Warna tombol sesuai status
+                    color: Colors.blue, // Warna tombol selalu biru
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextButton(
-                    onPressed: statusPinjaman == "Sesuai"
-                        ? () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Pengajuan berhasil diajukan!"),
-                              ),
-                            );
-                            Navigator.of(context).pop(); // Tutup dialog
-                          }
-                        : null, // Nonaktifkan tombol jika status tidak sesuai
+                    onPressed: () async {
+                      await _submitToServer(
+                          context); // Fungsi pengajuan tetap dijalankan
+                    },
                     child: Text(
                       "Ajukan",
                       style: AppTextStyles.button.copyWith(
-                        color: statusPinjaman == "Sesuai"
-                            ? Colors.white
-                            : Colors.black38, // Warna teks tombol
+                        color: Colors.white, // Warna teks tombol selalu putih
                       ),
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         );
       },
     );
+  }
+
+  Future<void> _submitToServer(BuildContext context) async {
+    const String url = ApiConfig.postDistrbusiKreditEndpoint;
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "id_anggota": idAnggota,
+          "id_penawaran": idPenawaran,
+          "nilai_pinjaman": penawaran,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+
+        if (result['message'] != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Pengajuan berhasil diajukan!")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("Gagal menyimpan pengajuan: ${result['error']}")),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text("Gagal menghubungi server: ${response.statusCode}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Terjadi kesalahan: $e")),
+      );
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 }

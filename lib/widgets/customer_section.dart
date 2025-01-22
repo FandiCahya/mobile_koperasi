@@ -1,73 +1,52 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../core/text_styles.dart';
 import '../core/spacing.dart';
 import 'customer_card.dart';
 import 'AllCustomersPage.dart';
+import 'package:http/http.dart' as http;
+import '../core/api_config.dart';
 
-class CustomerSection extends StatelessWidget {
-  final List<Map<String, dynamic>> customers = [
-  {
-    "name": "Nasabah 1",
-    "jenis_kelamin": "Laki-Laki",
-    "status": "Menikah",
-    "tanggungan": 2,
-    "pendidikan": "Sarjana",
-    "status_karyawan": "Karyawan Tetap",
-    "gaji": "Rp12.000.000",
-    "properti": "Rumah, Mobil"
-  },
-  {
-    "name": "Nasabah 2",
-    "jenis_kelamin": "Perempuan",
-    "status": "Lajang",
-    "tanggungan": 0,
-    "pendidikan": "Diploma",
-    "status_karyawan": "Freelancer",
-    "gaji": "Rp6.000.000",
-    "properti": "Motor"
-  },
-  {
-    "name": "Nasabah 3",
-    "jenis_kelamin": "Laki-Laki",
-    "status": "Cerai",
-    "tanggungan": 1,
-    "pendidikan": "SMA",
-    "status_karyawan": "Wiraswasta",
-    "gaji": "Rp8.000.000",
-    "properti": "Rumah"
-  },
-  {
-    "name": "Nasabah 4",
-    "jenis_kelamin": "Perempuan",
-    "status": "Menikah",
-    "tanggungan": 3,
-    "pendidikan": "Sarjana",
-    "status_karyawan": "Karyawan Kontrak",
-    "gaji": "Rp10.000.000",
-    "properti": "Apartemen, Mobil"
-  },
-  {
-    "name": "Nasabah 5",
-    "jenis_kelamin": "Laki-Laki",
-    "status": "Lajang",
-    "tanggungan": 0,
-    "pendidikan": "Diploma",
-    "status_karyawan": "Karyawan Tetap",
-    "gaji": "Rp7.000.000",
-    "properti": "Motor"
-  },
-  {
-    "name": "Nasabah 6",
-    "jenis_kelamin": "Perempuan",
-    "status": "Menikah",
-    "tanggungan": 2,
-    "pendidikan": "Magister",
-    "status_karyawan": "Karyawan Tetap",
-    "gaji": "Rp15.000.000",
-    "properti": "Rumah, Mobil, Tanah"
-  },
-];
+class CustomerSection extends StatefulWidget {
+  @override
+  _CustomerSectionState createState() => _CustomerSectionState();
+}
 
+class _CustomerSectionState extends State<CustomerSection> {
+  List<Map<String, dynamic>> customers = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCustomers();
+  }
+
+  Future<void> fetchCustomers() async {
+    try {
+      final response =
+          await http.get(Uri.parse(ApiConfig.getResikoKreditEndpoint));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        if (jsonResponse['status'] == 'success') {
+          setState(() {
+            customers = List<Map<String, dynamic>>.from(jsonResponse['data']);
+            isLoading = false;
+          });
+        } else {
+          throw Exception('Failed to load data');
+        }
+      } else {
+        throw Exception('Failed to fetch data');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +57,7 @@ class CustomerSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "List Anggota",
+              "List Pengajuan Resiko Kredit",
               style: AppTextStyles.pengajuanNasabah,
             ),
             TextButton(
@@ -86,7 +65,8 @@ class CustomerSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AllCustomersPage(customers: customers),
+                    builder: (context) =>
+                        AllCustomersPage(customers: customers),
                   ),
                 );
               },
@@ -98,26 +78,26 @@ class CustomerSection extends StatelessWidget {
           ],
         ),
         AppSpacing.heightHigh,
-        SizedBox(
-          height: 100, // Tinggi widget untuk setiap item nasabah
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: customers.length < 5 ? customers.length : 5, // Limit to 5 items for preview
-            itemBuilder: (context, index) {
-              final customer = customers[index];
-              return CustomerCard(
-                name: customer['name'],
-                jenisKelamin: customer['jenis_kelamin'],
-                status: customer['status'],
-                tanggungan: customer['tanggungan'],
-                pendidikan: customer['pendidikan'],
-                statusKaryawan: customer['status_karyawan'],
-                gaji: customer['gaji'],
-                properti: customer['properti'],
-              );
-            },
-          ),
-        ),
+        isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: customers.length < 5 ? customers.length : 5,
+                  itemBuilder: (context, index) {
+                    final customer = customers[index];
+                    return CustomerCard(
+                      idAnggota: customer['id_anggota'],
+                      name: customer['name'],
+                      nilaiPinjaman: customer['nilai_pinjaman'].toString(),
+                      waktuPinjaman: customer['waktu_pinjaman'].toString(),
+                      historiPinjaman: customer['histori_pinjaman'].toString(),
+                      statusPinjaman: customer['status_pinjaman'],
+                    );
+                  },
+                ),
+              ),
       ],
     );
   }
