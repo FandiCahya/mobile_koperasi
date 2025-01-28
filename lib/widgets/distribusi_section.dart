@@ -2,9 +2,9 @@ import 'package:application_koperasi/core/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'card/applicant_card.dart';
+import 'card/distribusi_card.dart';
 import '../core/text_styles.dart';
-import 'All/AllApplicantsPage.dart';
+import 'All/AllDistribusisPage.dart';
 import '../core/api_config.dart';
 
 class ApplicantSection extends StatefulWidget {
