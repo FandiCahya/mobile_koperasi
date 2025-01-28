@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../core/spacing.dart';
 import '../../core/text_styles.dart';
-// import '../core/colors.dart';
 import '../../services/status_dialog.dart'; // Import file baru
 
 class ApplicantCard extends StatefulWidget {
-  final IconData icon;
-  final Color iconColor;
   final String idAnggota; // Add id_anggota as a parameter
   final String name;
   final String nilaiPinjaman;
   final String statusPinjaman; // Status can be "Bagus" or "Buruk"
 
   ApplicantCard({
-    required this.icon,
-    required this.iconColor,
     required this.idAnggota,
     required this.name,
     required this.nilaiPinjaman,
@@ -44,39 +39,26 @@ class _ApplicantCardState extends State<ApplicantCard> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                widget.icon,
-                color: widget.iconColor,
-                size: 40,
+              // Displaying id_anggota, name, and statusPinjaman
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.name,
+                    style: AppTextStyles.namaNasabah,
+                  ),
+                  Text(
+                    widget.statusPinjaman,
+                    style: AppTextStyles.namaNasabah,
+                  ),
+                ],
               ),
-              AppSpacing.widthSmall,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Displaying id_anggota, name, and statusPinjaman
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.name,
-                          style: AppTextStyles.namaNasabah,
-                        ),
-                        Text(
-                          widget.statusPinjaman,
-                          style: AppTextStyles.namaNasabah,
-                        ),
-                      ],
-                    ),
-                    AppSpacing.heightSmall,
-                    _buildPinjamanInfo(),
-                    AppSpacing.heightSmall,
-                  ],
-                ),
-              ),
+              AppSpacing.heightSmall,
+              _buildPinjamanInfo(),
+              AppSpacing.heightSmall,
             ],
           ),
         ),

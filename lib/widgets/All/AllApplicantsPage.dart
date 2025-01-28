@@ -21,9 +21,6 @@ class AllApplicantsPage extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: ApplicantCard(
-              icon: Icons
-                  .person, // Menambahkan icon default untuk setiap applicant
-              iconColor: Colors.blue, // Menambahkan warna icon default
               idAnggota: applicant['id_anggota'],
               name: applicant["name"],
               nilaiPinjaman: applicant["nilai_pinjaman"],

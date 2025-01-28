@@ -94,8 +94,6 @@ class _ApplicantSectionState extends State<ApplicantSection> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ApplicantCard(
-                        icon: Icons.person,
-                        iconColor: AppColors.primaryColor,
                         idAnggota: applicant['id_anggota'],
                         name: applicant["name"],
                         nilaiPinjaman: applicant["nilai_pinjaman"].toString(),
