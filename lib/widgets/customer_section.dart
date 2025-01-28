@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../core/text_styles.dart';
 import '../core/spacing.dart';
-import 'customer_card.dart';
-import 'AllCustomersPage.dart';
+import 'card/customer_card.dart';
+import 'All/AllCustomersPage.dart';
 import 'package:http/http.dart' as http;
 import '../core/api_config.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../core/spacing.dart';
-import '../core/text_styles.dart';
+import '../../core/spacing.dart';
+import '../../core/text_styles.dart';
 // import '../core/colors.dart';
-import '../services/status_dialog.dart'; // Import file baru
+import '../../services/status_dialog.dart'; // Import file baru
 
 class ApplicantCard extends StatefulWidget {
   final IconData icon;

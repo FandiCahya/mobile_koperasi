@@ -3,6 +3,8 @@ import '../core/colors.dart';
 import '../widgets/header_widget.dart';
 import '../widgets/applicant_section.dart';
 import '../widgets/customer_section.dart';
+import '../widgets/offer_section.dart';
+import '../widgets/users_section.dart';
 import '../widgets/offerpage.dart';
 import '../core/spacing.dart';
 import '../widgets/adduser.dart';
@@ -63,8 +65,17 @@ class AdminDashboard extends StatelessWidget {
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
+
                     CustomerSection(),
                     AppSpacing.heightHigh,
+                    Divider(thickness: 1, color: Colors.grey[300]),
+                    AppSpacing.heightHigh,
+
+                    OfferSection(),
+                    Divider(thickness: 1, color: Colors.grey[300]),
+                    AppSpacing.heightHigh,
+
+                    UserSection(),
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
                     // Button: Tambah Penawaran

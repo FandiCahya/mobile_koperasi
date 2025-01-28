@@ -2,21 +2,21 @@ import 'package:application_koperasi/core/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'card/applicant_card.dart';
+import 'card/user_card.dart'; // Pastikan ini adalah file UserCard
 import '../core/text_styles.dart';
-import 'All/AllApplicantsPage.dart';
+import 'All/AllUserPage.dart'; // Ubah untuk halaman semua user
 import '../core/api_config.dart';
 
-class ApplicantSection extends StatefulWidget {
+class UserSection extends StatefulWidget {
   @override
-  _ApplicantSectionState createState() => _ApplicantSectionState();
+  _UserSectionState createState() => _UserSectionState();
 }
 
-class _ApplicantSectionState extends State<ApplicantSection> {
-  late Future<List<Map<String, dynamic>>> _applicants;
+class _UserSectionState extends State<UserSection> {
+  late Future<List<Map<String, dynamic>>> _users;
 
-  Future<List<Map<String, dynamic>>> fetchApplicants() async {
-    final url = Uri.parse(ApiConfig.getDistrbusiKreditEndpoint); // Ganti dengan URL API Anda
+  Future<List<Map<String, dynamic>>> fetchUsers() async {
+    final url = Uri.parse(ApiConfig.getMemberEndpoint); // Ganti dengan URL API Anda
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -27,14 +27,14 @@ class _ApplicantSectionState extends State<ApplicantSection> {
         throw Exception(data["message"]);
       }
     } else {
-      throw Exception("Failed to load applicants");
+      throw Exception("Failed to load users");
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _applicants = fetchApplicants();
+    _users = fetchUsers();
   }
 
   @override
@@ -42,7 +42,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _applicants,
+      future: _users,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -51,14 +51,14 @@ class _ApplicantSectionState extends State<ApplicantSection> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text("Tidak ada data"));
         } else {
-          final applicants = snapshot.data!;
+          final users = snapshot.data!;
           return Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "List Pengajuan Distribusi Kredit",
+                    "List User",
                     style: AppTextStyles.pengajuanNasabah,
                   ),
                   Flexible(
@@ -69,8 +69,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AllApplicantsPage(applicants: applicants),
+                              builder: (context) => AllUsersPage(users: users),
                             ),
                           );
                         },
@@ -88,18 +87,17 @@ class _ApplicantSectionState extends State<ApplicantSection> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: ListView.builder(
-                  itemCount: applicants.length < 5 ? applicants.length : 5,
+                  itemCount: users.length < 5 ? users.length : 5,
                   itemBuilder: (context, index) {
-                    final applicant = applicants[index];
+                    final user = users[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ApplicantCard(
-                        icon: Icons.person,
-                        iconColor: AppColors.primaryColor,
-                        idAnggota: applicant['id_anggota'],
-                        name: applicant["name"],
-                        nilaiPinjaman: applicant["nilai_pinjaman"].toString(),
-                        statusPinjaman: applicant["status_pinjaman"],
+                      child: UserCard(
+                        idAnggota: user['id_anggota'] ?? 'Unknown ID',
+                        nama: user['nama'] ?? 'Unknown Name',
+                        email: user['email'] ?? 'Unknown Email',
+                        jenisKelamin: user['jenis_kelamin'] ?? 'Unknown',
+                        role: user['role'] ?? 'Unknown Role',
                       ),
                     );
                   },
@@ -112,4 +110,3 @@ class _ApplicantSectionState extends State<ApplicantSection> {
     );
   }
 }
-

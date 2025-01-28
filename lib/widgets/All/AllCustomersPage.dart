@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customer_card.dart';
+import '../card/customer_card.dart';
 
 class AllCustomersPage extends StatelessWidget {
   final List<Map<String, dynamic>> customers;

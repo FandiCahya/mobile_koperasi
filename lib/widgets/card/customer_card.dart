@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../core/padding.dart';
-import '../core/text_styles.dart';
-import '../core/spacing.dart';
-import '../services/status_dialog2.dart';
+import '../../core/padding.dart';
+import '../../core/text_styles.dart';
+import '../../core/spacing.dart';
+import '../../services/status_dialog2.dart';
 
 class CustomerCard extends StatelessWidget {
   final String idAnggota;

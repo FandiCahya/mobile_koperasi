@@ -2,21 +2,22 @@ import 'package:application_koperasi/core/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'card/applicant_card.dart';
+import 'card/offer_card.dart'; // Pastikan ini adalah file OfferCard
 import '../core/text_styles.dart';
-import 'All/AllApplicantsPage.dart';
+import 'all/AllOfferPage.dart';
 import '../core/api_config.dart';
 
-class ApplicantSection extends StatefulWidget {
+class OfferSection extends StatefulWidget {
   @override
-  _ApplicantSectionState createState() => _ApplicantSectionState();
+  _OfferSectionState createState() => _OfferSectionState();
 }
 
-class _ApplicantSectionState extends State<ApplicantSection> {
-  late Future<List<Map<String, dynamic>>> _applicants;
+class _OfferSectionState extends State<OfferSection> {
+  late Future<List<Map<String, dynamic>>> _offers;
 
-  Future<List<Map<String, dynamic>>> fetchApplicants() async {
-    final url = Uri.parse(ApiConfig.getDistrbusiKreditEndpoint); // Ganti dengan URL API Anda
+  Future<List<Map<String, dynamic>>> fetchOffers() async {
+    final url = Uri.parse(
+        ApiConfig.getPenawaranKreditEndpoint); // Ganti dengan URL API Anda
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -27,14 +28,14 @@ class _ApplicantSectionState extends State<ApplicantSection> {
         throw Exception(data["message"]);
       }
     } else {
-      throw Exception("Failed to load applicants");
+      throw Exception("Failed to load offers");
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _applicants = fetchApplicants();
+    _offers = fetchOffers();
   }
 
   @override
@@ -42,7 +43,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _applicants,
+      future: _offers,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -51,14 +52,14 @@ class _ApplicantSectionState extends State<ApplicantSection> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text("Tidak ada data"));
         } else {
-          final applicants = snapshot.data!;
+          final offers = snapshot.data!;
           return Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "List Pengajuan Distribusi Kredit",
+                    "List Penawaran Kredit",
                     style: AppTextStyles.pengajuanNasabah,
                   ),
                   Flexible(
@@ -70,7 +71,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AllApplicantsPage(applicants: applicants),
+                                  AllOffersPage(offers: offers),
                             ),
                           );
                         },
@@ -88,18 +89,15 @@ class _ApplicantSectionState extends State<ApplicantSection> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: ListView.builder(
-                  itemCount: applicants.length < 5 ? applicants.length : 5,
+                  itemCount: offers.length < 5 ? offers.length : 5,
                   itemBuilder: (context, index) {
-                    final applicant = applicants[index];
+                    final offer = offers[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ApplicantCard(
-                        icon: Icons.person,
-                        iconColor: AppColors.primaryColor,
-                        idAnggota: applicant['id_anggota'],
-                        name: applicant["name"],
-                        nilaiPinjaman: applicant["nilai_pinjaman"].toString(),
-                        statusPinjaman: applicant["status_pinjaman"],
+                      child: OfferCard(
+                        idPenawaran: offer['id_penawaran'] ?? 'Unknown ID',
+                        nilaiPenawaran:
+                            offer['penawaran']?.toString() ?? '0',
                       ),
                     );
                   },
@@ -112,4 +110,3 @@ class _ApplicantSectionState extends State<ApplicantSection> {
     );
   }
 }
-

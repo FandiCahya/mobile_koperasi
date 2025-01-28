@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'applicant_card.dart';
+import '../card/applicant_card.dart';
 
 class AllApplicantsPage extends StatelessWidget {
   final List<Map<String, dynamic>> applicants;
