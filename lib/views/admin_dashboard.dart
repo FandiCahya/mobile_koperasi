@@ -9,7 +9,9 @@ import '../widgets/offerpage.dart';
 import '../core/spacing.dart';
 import '../widgets/adduser.dart';
 
+// Kelas AdminDashboard sebagai StatelessWidget karena data yang ditampilkan bersifat tetap
 class AdminDashboard extends StatelessWidget {
+  // Variabel untuk menyimpan informasi admin yang login
   final String idAnggota;
   final String adminName;
   final String email;
@@ -22,6 +24,7 @@ class AdminDashboard extends StatelessWidget {
   final String properti;
   final String role;
 
+  // Konstruktor dengan parameter yang diperlukan
   AdminDashboard(
       {required this.idAnggota,
       required this.adminName,
@@ -41,15 +44,19 @@ class AdminDashboard extends StatelessWidget {
       backgroundColor: AppColors.dashboardBackground,
       body: Column(
         children: [
+          // Header dengan nama admin yang login
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: HeaderWidget(
               greeting: "Hello, Welcome 👋",
               name: "- $adminName",
-              profileImagePath: 'assets/img/man.png',
+              profileImagePath:
+                  'assets/img/man.png', // Gambar profil default admin
             ),
           ),
-          AppSpacing.heightHigh,
+          AppSpacing.heightHigh, // Jarak antara header dan konten utama
+
+          // Bagian utama dashboard
           Expanded(
             child: Container(
               width: double.infinity,
@@ -61,23 +68,28 @@ class AdminDashboard extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Bagian Distribusi kredit
                     ApplicantSection(),
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
 
+                    // Bagian Resiko Kredit
                     CustomerSection(),
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
 
+                    // Bagian penawaran
                     OfferSection(),
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
 
+                    // Bagian Anggota   
                     UserSection(),
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
+
                     // Button: Tambah Penawaran
                     Container(
                       padding: EdgeInsets.symmetric(
@@ -88,6 +100,7 @@ class AdminDashboard extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
+                          // Navigasi ke halaman Tambah Penawaran
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -112,6 +125,7 @@ class AdminDashboard extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
+                          // Navigasi ke halaman Tambah Anggota
                           Navigator.push(
                             context,
                             MaterialPageRoute(

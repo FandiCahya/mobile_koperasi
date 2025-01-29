@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../core/spacing.dart';
-import '../../core/text_styles.dart';
-import '../../services/status_dialog.dart'; // Import file baru
+import '../../core/spacing.dart'; // Import file untuk pengaturan jarak antar elemen
+import '../../core/text_styles.dart'; // Import file untuk gaya teks
+import '../../services/status_dialog.dart'; // Import file untuk menampilkan detail pemohon
 
+// Widget `ApplicantCard` yang akan menampilkan data pemohon distribusi kredit
 class ApplicantCard extends StatefulWidget {
   final String idAnggota; // Add id_anggota as a parameter
   final String name;
   final String nilaiPinjaman;
   final String statusPinjaman; // Status can be "Bagus" or "Buruk"
 
+  // Konstruktor dengan parameter yang wajib diisi
   ApplicantCard({
     required this.idAnggota,
     required this.name,
@@ -21,7 +23,7 @@ class ApplicantCard extends StatefulWidget {
 }
 
 class _ApplicantCardState extends State<ApplicantCard> {
-  static List<Map<String, dynamic>> applicantStatus = [];
+  static List<Map<String, dynamic>> applicantStatus = []; // Menyimpan status pemohon
 
   void initState() {
     super.initState();
@@ -31,6 +33,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Ketika kartu ditekan, tampilkan detail pemohon dalam dialog
         showDetailsDialog(
             context, widget.name, widget.nilaiPinjaman, widget.statusPinjaman);
       },
@@ -42,7 +45,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Displaying id_anggota, name, and statusPinjaman
+              // Menampilkan nama pemohon dan status pinjaman dalam satu baris
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -57,7 +60,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
                 ],
               ),
               AppSpacing.heightSmall,
-              _buildPinjamanInfo(),
+              _buildPinjamanInfo(), // Menampilkan informasi nilai pinjaman
               AppSpacing.heightSmall,
             ],
           ),
@@ -66,6 +69,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
     );
   }
 
+  // Widget untuk menampilkan nilai pinjaman
   Widget _buildPinjamanInfo() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,6 +93,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
     );
   }
 
+  // Widget untuk menampilkan status pemohon dengan warna yang berbeda
   Widget _statusText(String status) {
     Color statusColor;
     String displayStatus;
@@ -113,6 +118,7 @@ class _ApplicantCardState extends State<ApplicantCard> {
     );
   }
 
+  // Fungsi untuk mendapatkan status pemohon berdasarkan nama
   bool? _getApplicantStatus(String name) {
     for (var applicant in applicantStatus) {
       if (applicant['name'] == name) {

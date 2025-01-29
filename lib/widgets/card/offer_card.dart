@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../core/spacing.dart';
-import '../../core/text_styles.dart';
-// import '../core/colors.dart';
-import '../../core/icon.dart';
-import '../../services/status_dialog.dart'; // Import file baru
+import '../../core/spacing.dart'; // Import file untuk pengaturan jarak antar elemen
+import '../../core/text_styles.dart'; // Import file untuk gaya teks
+import '../../core/icon.dart'; // Import file untuk ikon
+// import '../../services/status_dialog.dart'; // Import file untuk menampilkan dialog status
 
 class OfferCard extends StatefulWidget {
   final String idPenawaran;
   final String nilaiPenawaran;
 
+  // Konstruktor untuk menerima parameter
   OfferCard({
     required this.idPenawaran,
     required this.nilaiPenawaran,
@@ -58,6 +58,7 @@ class _OfferCardState extends State<OfferCard> {
     );
   }
 
+  // Widget untuk menampilkan informasi nilai penawaran
   Widget _buildPinjamanInfo() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,19 +5,19 @@ import '../core/spacing.dart';
 import '../core/border.dart';
 import '../core/icon.dart';
 import '../core/padding.dart';
-import '../models/user.dart';
 import 'admin_dashboard.dart';
 import 'nasabah_dashboard.dart';
-import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../core/api_config.dart';
+import '../core/api_config.dart'; // Import file konfigurasi API
 
+// Membuat kelas LoginScreen dengan stateful widget untuk menangani perubahan state
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+// Kelas state untuk LoginScreen
 class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
 
@@ -27,11 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan ukuran layar
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white, // Latar belakang putih
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(
@@ -42,14 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: constraints.maxHeight * 0.1), // Spacer
+                      SizedBox(
+                          height: constraints.maxHeight *
+                              0.1), // Spacer 10% tinggi layar
+                      // Logo aplikasi
                       Image.asset(
                         'assets/img/koperasi.png',
                         height: MediaQuery.of(context).size.height *
                             0.2, // 20% dari tinggi layar
-                        width: MediaQuery.of(context).size.width * 0.4,
+                        width: MediaQuery.of(context).size.width *
+                            0.4, // 40% lebar layar
                       ),
                       AppSpacing.heightExtraLarge,
+                      // Judul aplikasi
                       Text(
                         'Aplikasi Pengajuan Kredit KSP Berbasis Mobile',
                         style: AppTextStyles.heading.copyWith(
@@ -59,11 +65,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         textAlign: TextAlign.center,
                       ),
                       AppSpacing.heightVeryLarge,
+                      // Label Sign In
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text('Sign In', style: AppTextStyles.heading),
                       ),
                       AppSpacing.heightVeryLarge,
+                      // Input Email
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -75,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       AppSpacing.heightLarge,
+                      // Input Password
                       TextField(
                         controller: _passwordController,
                         obscureText: !_isPasswordVisible,
@@ -95,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       AppSpacing.heightMedium,
+                      // Tombol "Forgot Password"
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -108,9 +118,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       AppSpacing.heightLarge,
+                      // Tombol Login
                       GestureDetector(
                         onTap: () {
-                          _handleLogin(context);
+                          _handleLogin(context); // Memanggil fungsi login
                         },
                         child: Container(
                           width: double.infinity,
@@ -131,7 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              // Positioned logos in the top-left corner
+
+              // Logo tambahan di pojok kiri atas
               Positioned(
                 top: screenHeight * 0.05, // 5% dari tinggi layar
                 left: screenWidth * 0.1,
@@ -143,6 +155,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       fit: BoxFit.contain),
                 ),
               ),
+
+              // Logo tambahan di pojok kanan atas
               Positioned(
                 top: screenHeight * 0.05, // 5% dari tinggi layar
                 right: screenWidth * 0.1,
@@ -161,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Function to handle login and navigate based on user role
+  // Fungsi untuk menangani login dan navigasi berdasarkan peran pengguna
   void _handleLogin(BuildContext context) async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
@@ -192,7 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
         final statusKaryawan = responseData["status_karyawan"];
         final gaji = responseData["gaji"];
         final properti = responseData["properti"];
-        // Navigasi berdasarkan role
+        
+        // Navigasi berdasarkan role pengguna
         if (role == "admin") {
           Navigator.push(
             context,

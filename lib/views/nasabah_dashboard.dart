@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import '../core/colors.dart';
-import '../widgets/header_widget.dart';
-import '../core/spacing.dart';
-import '../widgets/submission_section.dart';
-import '../widgets/pengajuan.dart';
+import '../core/colors.dart'; // Import file untuk pengaturan warna
+import '../widgets/header_widget.dart'; // Widget header untuk dashboard
+import '../core/spacing.dart'; // Import file untuk mengatur jarak antar elemen
+import '../widgets/submission_section.dart'; // Widget untuk menampilkan pengajuan kredit yang diajukan nasabah
+import '../widgets/pengajuan.dart'; // Widget bagian pengajuan kredit
 
+// Kelas NasabahDashboard untuk halaman dashboard nasabah
 class NasabahDashboard extends StatelessWidget {
+  // Variabel untuk menyimpan informasi nasabah yang login
   final String idAnggota;
   final String anggotaName;
   final String email;
@@ -18,6 +20,8 @@ class NasabahDashboard extends StatelessWidget {
   final String properti;
   final String role;
 
+
+  // Konstruktor untuk menerima parameter dari login
   NasabahDashboard(
       {required this.idAnggota,
       required this.anggotaName,
@@ -37,6 +41,7 @@ class NasabahDashboard extends StatelessWidget {
       backgroundColor: AppColors.dashboardBackground,
       body: Column(
         children: [
+          // Header yang menampilkan nama nasabah yang sedang login
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: HeaderWidget(
@@ -46,6 +51,7 @@ class NasabahDashboard extends StatelessWidget {
             ),
           ),
           AppSpacing.heightHigh,
+          // Bagian utama dashboard
           Expanded(
             child: Container(
               width: double.infinity,
@@ -57,10 +63,12 @@ class NasabahDashboard extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Bagian Distribusi Kredit
                     SubmissionSection(idAnggota: idAnggota),
                     AppSpacing.heightHigh,
                     Divider(thickness: 1, color: Colors.grey[300]),
                     AppSpacing.heightHigh,
+                    // Bagian untuk pengajuan kredit baru /Resiko Kredit
                     PengajuanSection(idAnggota: idAnggota),
                   ],
                 ),

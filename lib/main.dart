@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'views/login.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp()); // Menjalankan aplikasi dengan widget MyApp sebagai root
 }
 
-
+// Kelas utama yang merupakan StatelessWidget
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),// Tambahkan builder untuk kompatibilitas
+      debugShowCheckedModeBanner: false, // Menghilangkan banner "Debug" pada aplikasi
+      home: LoginScreen(), // Menampilkan halaman login sebagai halaman utama aplikasi
     );
   }
 }
