@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/text_styles.dart';
-import '../../core/icon.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../core/api_config.dart';
-import '../../core/spacing.dart';
+import '../../core/text_styles.dart'; // Import untuk gaya teks
+import '../../core/icon.dart'; // Import ikon
+import 'package:http/http.dart' as http; // Import http untuk komunikasi API
+import 'dart:convert'; // Import untuk konversi JSON
+import '../../core/api_config.dart'; // Import konfigurasi API
+import '../../core/spacing.dart'; // Import untuk pengaturan jarak antar elemen
 
 class SubmissionCard extends StatelessWidget {
   final String idDistribusi;
@@ -13,6 +13,7 @@ class SubmissionCard extends StatelessWidget {
   final String idPenawaran;
   final String statusPinjaman;
 
+  // Konstruktor untuk menerima data pengajuan sebagai parameter
   SubmissionCard({
     required this.idDistribusi,
     required this.idAnggota,
@@ -25,7 +26,7 @@ class SubmissionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _showSubmissionDetails(context);
+        _showSubmissionDetails(context); // Ketika kartu ditekan, tampilkan detail pengajuan
       },
       child: Card(
         color: Colors.white,
@@ -37,7 +38,7 @@ class SubmissionCard extends StatelessWidget {
             children: [
               // Icon
               AppIcon.moneyIcon,
-              // Nilai dan status pinjaman
+              // Bagian tengah kartu yang menampilkan nilai pinjaman
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,6 +57,7 @@ class SubmissionCard extends StatelessWidget {
     );
   }
 
+  // Fungsi untuk menampilkan dialog detail pengajuan
   void _showSubmissionDetails(BuildContext context) {
     showDialog(
       context: context,
@@ -111,10 +113,12 @@ class SubmissionCard extends StatelessWidget {
     );
   }
 
+  // Fungsi untuk mengajukan data ke server melalui API
   Future<void> _submitToServer(BuildContext context) async {
     const String url = ApiConfig.postDistrbusiKreditEndpoint;
 
     try {
+      // Kirim data ke server menggunakan HTTP POST
       final response = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
@@ -127,7 +131,7 @@ class SubmissionCard extends StatelessWidget {
         }),
       );
       if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
+        final result = jsonDecode(response.body); // Parsing JSON dari response
 
         if (result['message'] != null) {
           ScaffoldMessenger.of(context).showSnackBar(

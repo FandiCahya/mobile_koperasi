@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../core/api_config.dart';
+import '../core/api_config.dart'; // Import konfigurasi API
 
+// Halaman `TambahAnggotaView` untuk menambahkan anggota baru
 class TambahAnggotaView extends StatelessWidget {
   final TextEditingController _idAnggotaController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -12,12 +13,14 @@ class TambahAnggotaView extends StatelessWidget {
   final TextEditingController _propertiController = TextEditingController();
   final TextEditingController _gajiController = TextEditingController();
 
+  // Variabel untuk nilai default dropdown
   String _jenisKelamin = 'Laki-laki';
   String _status = 'Belum kawin';
   String _pendidikan = 'Sekolah menengah';
   String _statusKaryawan = 'ASN';
   String _role = 'anggota';
 
+  // Fungsi untuk mengirim data ke server
   Future<void> _submitAnggota(BuildContext context) async {
     final email = _emailController.text;
     final password = _passwordController.text;
@@ -26,6 +29,7 @@ class TambahAnggotaView extends StatelessWidget {
     final properti = _propertiController.text;
     final gaji = _gajiController.text;
 
+    // Validasi input (tidak boleh kosong)
     if (email.isEmpty || password.isEmpty || nama.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Semua field wajib diisi!')),
@@ -33,6 +37,7 @@ class TambahAnggotaView extends StatelessWidget {
       return;
     }
 
+    // Kirim data ke server menggunakan API
     final url = Uri.parse(ApiConfig.addMemberEndpoint);
     final response = await http.post(
       url,
@@ -59,11 +64,13 @@ class TambahAnggotaView extends StatelessWidget {
             content: Text(
                 'Anggota berhasil ditambahkan. ID: ${responseData['id_anggota']}')),
       );
+
+      // Reset form setelah berhasil submit
       _emailController.clear();
       _passwordController.clear();
       _namaController.clear();
       _tanggunganController.clear();
-
+      _propertiController.clear();
       _gajiController.clear();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -75,123 +82,43 @@ class TambahAnggotaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tambah Anggota'),
-      ),
+      appBar: AppBar(title: Text('Tambah Anggota')), // AppBar dengan judul
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-              ),
+              _buildTextField(_emailController, 'Email'),
+              _buildTextField(_passwordController, 'Password', obscureText: true),
+              _buildTextField(_namaController, 'Nama'),
+              _buildDropdown('Jenis Kelamin', ['Laki-laki', 'Perempuan'], _jenisKelamin, (value) {
+                _jenisKelamin = value!;
+              }),
+              _buildDropdown('Status', ['Belum kawin', 'Kawin'], _status, (value) {
+                _status = value!;
+              }),
+              _buildTextField(_tanggunganController, 'Tanggungan', keyboardType: TextInputType.number),
+              _buildDropdown('Pendidikan', ['Sekolah menengah', 'Perguruan tinggi'], _pendidikan, (value) {
+                _pendidikan = value!;
+              }),
+              _buildDropdown('Status Karyawan', ['ASN', 'Honorer'], _statusKaryawan, (value) {
+                _statusKaryawan = value!;
+              }),
+              _buildTextField(_gajiController, 'Gaji', keyboardType: TextInputType.number),
+              _buildTextField(_propertiController, 'Properti'),
+              _buildDropdown('Role', ['admin', 'anggota'], _role, (value) {
+                _role = value!;
+              }),
+
               SizedBox(height: 16.0),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                controller: _namaController,
-                decoration: InputDecoration(labelText: 'Nama'),
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _jenisKelamin,
-                decoration: InputDecoration(labelText: 'Jenis Kelamin'),
-                items: ['Laki-laki', 'Perempuan']
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  _jenisKelamin = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _status,
-                decoration: InputDecoration(labelText: 'Status'),
-                items: ['Belum kawin', 'Kawin']
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  _status = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                controller: _tanggunganController,
-                decoration: InputDecoration(labelText: 'Tanggungan'),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _pendidikan,
-                decoration: InputDecoration(labelText: 'Pendidikan'),
-                items: ['Sekolah menengah', 'Perguruan tinggi']
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  _pendidikan = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _statusKaryawan,
-                decoration: InputDecoration(labelText: 'Status Karyawan'),
-                items: ['ASN', 'Honorer']
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  _statusKaryawan = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                controller: _gajiController,
-                decoration: InputDecoration(labelText: 'Gaji'),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                controller: _propertiController,
-                decoration: InputDecoration(labelText: 'Properti'),
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField(
-                value: _role,
-                decoration: InputDecoration(labelText: 'Role'),
-                items: ['admin', 'anggota']
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  _role = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
+
+              // Tombol Submit
               GestureDetector(
                 onTap: () => _submitAnggota(context),
                 child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                   decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(8.0),
@@ -207,6 +134,32 @@ class TambahAnggotaView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Widget untuk membuat TextField (input teks)
+  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false, TextInputType keyboardType = TextInputType.text}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: label),
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+      ),
+    );
+  }
+
+  // Widget untuk membuat Dropdown
+  Widget _buildDropdown(String label, List<String> items, String value, void Function(String?) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: DropdownButtonFormField(
+        value: value,
+        decoration: InputDecoration(labelText: label),
+        items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
+        onChanged: onChanged,
       ),
     );
   }

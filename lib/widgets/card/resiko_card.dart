@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/text_styles.dart';
-import '../../core/spacing.dart';
-import '../../services/status_dialog2.dart';
+import '../../core/text_styles.dart'; // Import untuk gaya teks
+import '../../core/spacing.dart'; // Import untuk pengaturan jarak antar elemen
+import '../../services/status_dialog2.dart'; // Import untuk menampilkan dialog detail
 
+// Widget `CustomerCard` menampilkan informasi nasabah dalam bentuk kartu
 class CustomerCard extends StatelessWidget {
   final String idAnggota;
   final String name;
@@ -11,6 +12,7 @@ class CustomerCard extends StatelessWidget {
   final String historiPinjaman;
   final String statusPinjaman;
 
+  // Konstruktor untuk menerima data nasabah sebagai parameter
   CustomerCard({
     required this.idAnggota,
     required this.name,
@@ -24,20 +26,21 @@ class CustomerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Saat kartu ditekan, tampilkan detail nasabah menggunakan dialog
         showDetailsDialog(context, name, nilaiPinjaman, waktuPinjaman,
             historiPinjaman, statusPinjaman);
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.6, // Lebar 60% layar
+        width: MediaQuery.of(context).size.width * 0.6, // Lebar kartu 60% dari layar
         constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.1, // Tinggi minimum
-          maxHeight: MediaQuery.of(context).size.height * 0.15, // Tinggi maksimum
+          minHeight: MediaQuery.of(context).size.height * 0.1, // Tinggi minimum kartu
+          maxHeight: MediaQuery.of(context).size.height * 0.15, // Tinggi maksimum kartu
         ),
         margin: const EdgeInsets.only(right: 12.0), // Jarak antar kartu
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12.0), // Padding agar konten tidak terlalu mepet
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Border kartu melengkung
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -50,6 +53,7 @@ class CustomerCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Bagian informasi utama di kiri
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,6 +78,7 @@ class CustomerCard extends StatelessWidget {
                 ],
               ),
             ),
+            // Bagian status dan waktu pinjaman di kanan
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -99,6 +104,7 @@ class CustomerCard extends StatelessWidget {
   }
 }
 
+// Widget `HorizontalCustomerCardList` menampilkan daftar nasabah secara horizontal
 class HorizontalCustomerCardList extends StatelessWidget {
   final List<Map<String, dynamic>> customers;
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/text_styles.dart';
+import '../../core/text_styles.dart'; // Import untuk gaya teks
+import '../../core/spacing.dart';
 
+// Widget `UserCard` untuk menampilkan informasi pengguna dalam bentuk kartu
 class UserCard extends StatelessWidget {
   final String idAnggota;
   final String nama;
@@ -8,6 +10,7 @@ class UserCard extends StatelessWidget {
   final String jenisKelamin;
   final String role;
 
+  // Konstruktor untuk menerima data pengguna sebagai parameter
   UserCard({
     required this.idAnggota,
     required this.nama,
@@ -27,6 +30,7 @@ class UserCard extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
+            // Avatar dengan ikon berdasarkan jenis kelamin
             CircleAvatar(
               backgroundColor: Colors.blue,
               child: Icon(
@@ -34,30 +38,34 @@ class UserCard extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(width: 16),
+            AppSpacing.heightHigh,
+            // Informasi pengguna
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    nama,
-                    style: AppTextStyles.namaNasabah,
+                    nama, // Menampilkan nama pengguna
+                    style: AppTextStyles
+                        .namaNasabah, // Gaya teks dari AppTextStyles
                   ),
-                  SizedBox(height: 4),
+                  AppSpacing.heightVerySmall,// Jarak kecil antar elemen
                   Text(
-                    email,
+                    email, // Menampilkan email pengguna
                     style: AppTextStyles.skorKredit,
                   ),
-                  SizedBox(height: 4),
+                  AppSpacing.heightVerySmall,
                   Text(
-                    role,
+                    role, // Menampilkan peran pengguna
                     style: AppTextStyles.seeAll.copyWith(
-                      color: Colors.grey,
+                      color: Colors.grey, // Warna teks peran abu-abu
                     ),
                   ),
                 ],
               ),
             ),
+
+            // ID Anggota ditampilkan di kanan
             Text(
               idAnggota,
               style: AppTextStyles.skorKredit.copyWith(color: Colors.grey),
