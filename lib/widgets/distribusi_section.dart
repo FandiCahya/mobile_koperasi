@@ -16,7 +16,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
   late Future<List<Map<String, dynamic>>> _applicants;
 
   Future<List<Map<String, dynamic>>> fetchApplicants() async {
-    final url = Uri.parse(ApiConfig.getDistrbusiKreditEndpoint); // URL API untuk mendapatkan data
+    final url = Uri.parse(ApiConfig.getPengajuanKreditEndpoint); // URL API untuk mendapatkan data
     final response = await http.get(url); // Mengirim permintaan HTTP GET
 
     if (response.statusCode == 200) {
@@ -60,7 +60,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "List Pengajuan Distribusi Kredit",
+                    "List Pengajuan Kredit",
                     style: AppTextStyles.pengajuanNasabah,
                   ),
                   Flexible(
@@ -102,7 +102,7 @@ class _ApplicantSectionState extends State<ApplicantSection> {
                         idAnggota: applicant['id_anggota'],
                         name: applicant["name"],
                         nilaiPinjaman: applicant["nilai_pinjaman"].toString(),
-                        statusPinjaman: applicant["status_pinjaman"],
+                        statusPinjaman: applicant["status"],
                       ),
                     );
                   },

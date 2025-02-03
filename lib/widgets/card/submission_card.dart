@@ -11,7 +11,7 @@ class SubmissionCard extends StatelessWidget {
   final String idAnggota;
   final String nilaiPinjaman;
   final String idPenawaran;
-  final String statusPinjaman;
+  final String status_pengajuan;
 
   // Konstruktor untuk menerima data pengajuan sebagai parameter
   SubmissionCard({
@@ -19,7 +19,7 @@ class SubmissionCard extends StatelessWidget {
     required this.idAnggota,
     required this.nilaiPinjaman,
     required this.idPenawaran,
-    required this.statusPinjaman,
+    required this.status_pengajuan,
   });
 
   @override
@@ -80,7 +80,7 @@ class SubmissionCard extends StatelessWidget {
               ),
               AppSpacing.heightSmall,
               Text(
-                "Status Pinjaman: $statusPinjaman",
+                "Status: $status_pengajuan",
                 style: AppTextStyles.label,
               ),
               AppSpacing.heightSmall,
@@ -127,7 +127,6 @@ class SubmissionCard extends StatelessWidget {
           "id_distribusi": idDistribusi,
           "id_penawaran": idPenawaran,
           "nilai_pinjaman": nilaiPinjaman,
-          "status_pinjaman": statusPinjaman,
         }),
       );
       if (response.statusCode == 200) {

@@ -50,16 +50,18 @@ class _PengajuanKreditFormState extends State<PengajuanKreditForm> {
       final responseData = json.decode(response.body);
       if (responseData['status'] == 'success') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData['message'])),
+          SnackBar(
+              content: Text(
+                  "Pengajuan berhasil! ID Resiko: ${responseData['id_resiko']}")),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData['message'])),
+          SnackBar(content: Text("Gagal: ${responseData['message']}")),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengirim data. Coba lagi nanti.')),
+        SnackBar(content: Text('Gagal menghubungi server.')),
       );
     }
   }

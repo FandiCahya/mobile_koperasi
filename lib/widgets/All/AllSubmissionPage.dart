@@ -26,7 +26,7 @@ class AllSubmissionsPage extends StatelessWidget {
               idAnggota: submission["id_anggota"],
               nilaiPinjaman: submission["nilai_pinjaman"],
               idPenawaran: submission["id_penawaran"],
-              statusPinjaman: submission["status_pinjaman"],
+              status_pengajuan: submission["status_pengajuan"],
             ),
           );
         },

@@ -57,7 +57,7 @@ class _CustomerSectionState extends State<CustomerSection> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "List Pengajuan Resiko Kredit",
+              "List Resiko Kredit",
               style: AppTextStyles.pengajuanNasabah,
             ),
             TextButton(
