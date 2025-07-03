@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import '../core/spacing.dart';
 import '../core/text_styles.dart';
 import '../core/padding.dart';
+import '../core/api_config.dart';
+
+Future<void> updateStatus(String id, String status) async {
+  final url = Uri.parse(ApiConfig.updatePengajuanKreditEndpoint); 
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body:
+        jsonEncode({'id_pengajuan_distribusi': id, 'status_pengajuan': status}),
+  );
+
+  if (response.statusCode == 200) {
+    print("Status berhasil diperbarui!");
+  } else {
+    print("Gagal memperbarui status");
+  }
+}
 
 void showStatusDialog(BuildContext context, bool isAccepted) {
   showDialog(
@@ -37,7 +57,8 @@ void showStatusDialog(BuildContext context, bool isAccepted) {
   );
 }
 
-void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, String statusPinjaman) {
+void showDetailsDialog(BuildContext context, String id, String name,
+    String nilaiPinjaman, String statusPengajuan) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -51,17 +72,20 @@ void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, 
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppSpacing.heightHigh,
-            Text("Detail Pengajuan Distribusi Kredit", style: AppTextStyles.namaNasabah),
+            Text("Detail Pengajuan Distribusi Kredit",
+                style: AppTextStyles.namaNasabah),
             AppSpacing.heightHigh,
             Text("Nama: $name", style: AppTextStyles.details),
             Text("Jumlah: $nilaiPinjaman", style: AppTextStyles.details),
-            Text("Status: $statusPinjaman", style: AppTextStyles.details),
+            Text("Status: $statusPengajuan", style: AppTextStyles.details),
             AppSpacing.heightHigh,
+            if (statusPengajuan == "Pending") ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await updateStatus(id, "Diterima");
                       Navigator.of(context).pop();
                       showStatusDialog(context, true);
                     },
@@ -73,12 +97,14 @@ void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, 
                       ),
                       child: Text(
                         "Terima",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await updateStatus(id, "Ditolak");
                       Navigator.of(context).pop();
                       showStatusDialog(context, false);
                     },
@@ -90,13 +116,26 @@ void showDetailsDialog(BuildContext context, String name, String nilaiPinjaman, 
                       ),
                       child: Text(
                         "Tolak",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ],
               ),
+            ] else ...[
+              Center(
+                child: Icon(
+                  statusPengajuan == "Diterima"
+                      ? Icons.check_circle
+                      : Icons.cancel,
+                  color:
+                      statusPengajuan == "Diterima" ? Colors.green : Colors.red,
+                  size: 40,
+                ),
+              ),
             ],
+          ],
         ),
       );
     },

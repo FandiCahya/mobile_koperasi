@@ -1,130 +1,130 @@
 import 'package:flutter/material.dart';
-import '../../core/spacing.dart'; // Import file untuk pengaturan jarak antar elemen
-import '../../core/text_styles.dart'; // Import file untuk gaya teks
-import '../../services/status_dialog.dart'; // Import file untuk menampilkan detail pemohon
+import '../../core/text_styles.dart'; // Import untuk gaya teks
+import '../../core/spacing.dart'; // Import untuk pengaturan jarak antar elemen
 
-// Widget `ApplicantCard` yang akan menampilkan data pemohon distribusi kredit
-class ApplicantCard extends StatefulWidget {
-  final String idAnggota; // Add id_anggota as a parameter
+// Widget `CustomerCard` menampilkan informasi nasabah dalam bentuk kartu
+class CustomerCard extends StatelessWidget {
+  final String idAnggota;
   final String name;
   final String nilaiPinjaman;
-  final String statusPinjaman; // Status can be "Bagus" or "Buruk"
+  final String waktuPinjaman;
+  final String historiPinjaman;
+  final String statusPinjaman;
 
-  // Konstruktor dengan parameter yang wajib diisi
-  ApplicantCard({
+  // Konstruktor untuk menerima data nasabah sebagai parameter
+  CustomerCard({
     required this.idAnggota,
     required this.name,
     required this.nilaiPinjaman,
+    required this.waktuPinjaman,
+    required this.historiPinjaman,
     required this.statusPinjaman,
   });
-
-  @override
-  _ApplicantCardState createState() => _ApplicantCardState();
-}
-
-class _ApplicantCardState extends State<ApplicantCard> {
-  static List<Map<String, dynamic>> applicantStatus = []; // Menyimpan status pemohon
-
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Ketika kartu ditekan, tampilkan detail pemohon dalam dialog
-        showDetailsDialog(
-            context, widget.name, widget.nilaiPinjaman, widget.statusPinjaman);
       },
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Menampilkan nama pemohon dan status pinjaman dalam satu baris
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.6, // Lebar kartu 60% dari layar
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.1, // Tinggi minimum kartu
+          maxHeight: MediaQuery.of(context).size.height * 0.15, // Tinggi maksimum kartu
+        ),
+        margin: const EdgeInsets.only(right: 12.0), // Jarak antar kartu
+        padding: const EdgeInsets.all(12.0), // Padding agar konten tidak terlalu mepet
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12), // Border kartu melengkung
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: Offset(2, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Bagian informasi utama di kiri
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
-                    style: AppTextStyles.namaNasabah,
+                    name,
+                    style: AppTextStyles.namaNasabah
+                        .copyWith(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  AppSpacing.heightSmall,
+                  Text(
+                    "Nilai Pinjaman:",
+                    style: AppTextStyles.label.copyWith(fontSize: 14),
                   ),
                   Text(
-                    widget.statusPinjaman,
-                    style: AppTextStyles.namaNasabah,
+                    nilaiPinjaman,
+                    style: AppTextStyles.label.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
-              AppSpacing.heightSmall,
-              _buildPinjamanInfo(), // Menampilkan informasi nilai pinjaman
-              AppSpacing.heightSmall,
-            ],
-          ),
+            ),
+            // Bagian status dan waktu pinjaman di kanan
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  statusPinjaman,
+                  style: AppTextStyles.label.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.blue,
+                  ),
+                ),
+                AppSpacing.heightSmall,
+                Text(
+                  waktuPinjaman,
+                  style: AppTextStyles.label.copyWith(fontSize: 12),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  // Widget untuk menampilkan nilai pinjaman
-  Widget _buildPinjamanInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Nilai Pinjaman
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Nilai Pinjaman:",
-              style: AppTextStyles.skorKredit,
-            ),
-            Text(
-              widget.nilaiPinjaman,
-              style: AppTextStyles.skorKredit,
-            ),
-          ],
-        ),
-        AppSpacing.heightSmall,
-      ],
+// Widget `HorizontalCustomerCardList` menampilkan daftar nasabah secara horizontal
+class HorizontalCustomerCardList extends StatelessWidget {
+  final List<Map<String, dynamic>> customers;
+
+  HorizontalCustomerCardList({required this.customers});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.2, // Tinggi untuk scroll
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal, // Geser horizontal
+        itemCount: customers.length,
+        itemBuilder: (context, index) {
+          final customer = customers[index];
+          return CustomerCard(
+            idAnggota: customer['idAnggota'] ?? 'Unknown ID',
+            name: customer['name'] ?? 'Unknown Name',
+            nilaiPinjaman: customer['nilaiPinjaman'] ?? '0',
+            waktuPinjaman: customer['waktuPinjaman'] ?? 'Unknown',
+            historiPinjaman: customer['historiPinjaman'] ?? 'Unknown',
+            statusPinjaman: customer['statusPinjaman'] ?? 'Unknown',
+          );
+        },
+      ),
     );
-  }
-
-  // Widget untuk menampilkan status pemohon dengan warna yang berbeda
-  Widget _statusText(String status) {
-    Color statusColor;
-    String displayStatus;
-
-    switch (status) {
-      case 'bagus':
-        statusColor = Colors.green;
-        displayStatus = "Bagus";
-        break;
-      case 'buruk':
-        statusColor = Colors.red;
-        displayStatus = "Buruk";
-        break;
-      default:
-        statusColor = Colors.orange;
-        displayStatus = "Pending";
-    }
-
-    return Text(
-      displayStatus,
-      style: AppTextStyles.skorKredit.copyWith(color: statusColor),
-    );
-  }
-
-  // Fungsi untuk mendapatkan status pemohon berdasarkan nama
-  bool? _getApplicantStatus(String name) {
-    for (var applicant in applicantStatus) {
-      if (applicant['name'] == name) {
-        return applicant['status'];
-      }
-    }
-    return null;
   }
 }

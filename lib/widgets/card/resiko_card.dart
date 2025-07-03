@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/text_styles.dart'; // Import untuk gaya teks
 import '../../core/spacing.dart'; // Import untuk pengaturan jarak antar elemen
-import '../../services/status_dialog2.dart'; // Import untuk menampilkan dialog detail
 
 // Widget `CustomerCard` menampilkan informasi nasabah dalam bentuk kartu
 class CustomerCard extends StatelessWidget {
@@ -26,9 +25,6 @@ class CustomerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Saat kartu ditekan, tampilkan detail nasabah menggunakan dialog
-        showDetailsDialog(context, name, nilaiPinjaman, waktuPinjaman,
-            historiPinjaman, statusPinjaman);
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.6, // Lebar kartu 60% dari layar

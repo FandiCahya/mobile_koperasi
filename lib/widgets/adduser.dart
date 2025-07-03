@@ -5,7 +5,7 @@ import '../core/api_config.dart'; // Import konfigurasi API
 
 // Halaman `TambahAnggotaView` untuk menambahkan anggota baru
 class TambahAnggotaView extends StatelessWidget {
-  final TextEditingController _idAnggotaController = TextEditingController();
+  // final TextEditingController _idAnggotaController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _namaController = TextEditingController();

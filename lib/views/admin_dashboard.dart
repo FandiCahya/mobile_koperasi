@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/colors.dart';
 import '../widgets/header_widget.dart';
-import '../widgets/distribusi_section.dart';
+import '../widgets/pengajuan_section.dart';
 import '../widgets/Resiko_section.dart';
 import '../widgets/offer_section.dart';
 import '../widgets/users_section.dart';
